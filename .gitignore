@@ -1,0 +1,32 @@
+# Environment variables (SECRETS - NEVER COMMIT)
+.env
+*.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Uploaded files & vector stores (user data)
+backend/uploads/*.pdf
+backend/vectorstore/*.index
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
