@@ -84,7 +84,7 @@ export default function PDFUpload({ onUploadSuccess, currentDoc, userId }) {
   return (
     <div className="glass-panel uploader-container">
       <h3 className="panel-title">
-        <Upload size={18} className="text-primary-glow" style={{ color: 'hsl(var(--primary))' }} />
+        <Upload size={18} style={{ color: '#2D2B55' }} />
         Study Materials
       </h3>
 
@@ -167,40 +167,39 @@ export default function PDFUpload({ onUploadSuccess, currentDoc, userId }) {
           flex-direction: column;
         }
         .dropzone {
-          border: 2px dashed rgba(255, 255, 255, 0.1);
+          border: 2px dashed var(--border);
           border-radius: var(--radius-md);
           padding: 30px 20px;
           text-align: center;
           cursor: pointer;
           transition: var(--transition-smooth);
-          background: rgba(255, 255, 255, 0.01);
+          background: var(--bg-page);
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
         }
         .dropzone:hover, .dropzone.drag-active {
-          border-color: hsl(var(--primary));
-          background: rgba(139, 92, 246, 0.03);
-          box-shadow: 0 0 20px rgba(139, 92, 246, 0.1) inset;
+          border-color: #6366F1;
+          background: rgba(99, 102, 241, 0.03);
         }
         .upload-icon-wrapper {
           width: 50px;
           height: 50px;
-          background: rgba(255, 255, 255, 0.03);
+          background: var(--bg-surface-hover);
           border-radius: 50px;
           display: flex;
           align-items: center;
           justify-content: center;
           margin-bottom: 12px;
-          border: 1px solid var(--border-glass);
-          color: hsl(var(--text-secondary));
+          border: 1px solid var(--border);
+          color: var(--text-secondary);
           transition: var(--transition-smooth);
         }
         .dropzone:hover .upload-icon-wrapper {
-          color: hsl(var(--primary));
-          background: rgba(139, 92, 246, 0.1);
-          border-color: rgba(139, 92, 246, 0.2);
+          color: #6366F1;
+          background: rgba(99, 102, 241, 0.08);
+          border-color: rgba(99, 102, 241, 0.2);
           transform: scale(1.05);
         }
         .upload-icon {
@@ -210,21 +209,21 @@ export default function PDFUpload({ onUploadSuccess, currentDoc, userId }) {
         .dropzone-text-primary {
           font-size: 0.9rem;
           font-weight: 600;
-          color: hsl(var(--text-primary));
+          color: var(--text-primary);
           margin-bottom: 4px;
         }
         .dropzone-text-secondary {
           font-size: 0.78rem;
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
           margin-bottom: 12px;
         }
         .file-info-badge {
           font-size: 0.7rem;
-          color: hsl(var(--text-muted));
-          background: rgba(255, 255, 255, 0.04);
+          color: var(--text-muted);
+          background: var(--bg-surface-hover);
           padding: 2px 8px;
           border-radius: 12px;
-          border: 1px solid var(--border-glass);
+          border: 1px solid var(--border);
         }
         .uploading-state, .success-state, .error-state {
           display: flex;
@@ -237,44 +236,44 @@ export default function PDFUpload({ onUploadSuccess, currentDoc, userId }) {
         .spinner {
           width: 32px;
           height: 32px;
-          color: hsl(var(--primary));
+          color: #2D2B55;
           animation: spin 1.5s linear infinite;
           margin-bottom: 16px;
         }
         .state-label {
           font-size: 0.95rem;
           font-weight: 600;
-          color: hsl(var(--text-primary));
+          color: var(--text-primary);
           margin-bottom: 12px;
         }
         .progress-track {
           width: 100%;
           height: 6px;
-          background: rgba(255, 255, 255, 0.05);
+          background: var(--bg-surface-hover);
           border-radius: 10px;
           overflow: hidden;
           margin-bottom: 8px;
         }
         .progress-bar {
           height: 100%;
-          background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+          background: linear-gradient(90deg, #6366F1 0%, #8B5CF6 100%);
           border-radius: 10px;
           transition: width 0.1s ease;
         }
         .percentage-text {
           font-size: 0.75rem;
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
         }
         .success-icon-wrapper {
           width: 48px;
           height: 48px;
           border-radius: 50%;
-          background: rgba(16, 185, 129, 0.1);
-          border: 1px solid rgba(16, 185, 129, 0.2);
+          background: var(--success-bg);
+          border: 1px solid var(--success-border);
           display: flex;
           align-items: center;
           justify-content: center;
-          color: hsl(var(--success));
+          color: var(--success);
           margin-bottom: 12px;
         }
         .success-icon {
@@ -283,8 +282,8 @@ export default function PDFUpload({ onUploadSuccess, currentDoc, userId }) {
         }
         .doc-details-card {
           width: 100%;
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid var(--border-glass);
+          background: var(--bg-page);
+          border: 1px solid var(--border);
           border-radius: var(--radius-md);
           padding: 12px;
           display: flex;
@@ -293,7 +292,7 @@ export default function PDFUpload({ onUploadSuccess, currentDoc, userId }) {
           margin-bottom: 16px;
         }
         .doc-icon {
-          color: hsl(var(--primary));
+          color: #6366F1;
           flex-shrink: 0;
         }
         .doc-meta {
@@ -305,25 +304,25 @@ export default function PDFUpload({ onUploadSuccess, currentDoc, userId }) {
         .doc-name {
           font-size: 0.85rem;
           font-weight: 500;
-          color: #fff;
+          color: var(--text-primary);
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
         .doc-chunks {
           font-size: 0.72rem;
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
         }
         .error-icon-wrapper {
           width: 48px;
           height: 48px;
           border-radius: 50%;
-          background: rgba(239, 68, 68, 0.1);
-          border: 1px solid rgba(239, 68, 68, 0.2);
+          background: var(--danger-bg);
+          border: 1px solid var(--danger-border);
           display: flex;
           align-items: center;
           justify-content: center;
-          color: hsl(var(--danger));
+          color: var(--danger);
           margin-bottom: 12px;
         }
         .error-icon {
@@ -332,7 +331,7 @@ export default function PDFUpload({ onUploadSuccess, currentDoc, userId }) {
         }
         .error-description {
           font-size: 0.78rem;
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
           text-align: center;
           margin-bottom: 16px;
         }

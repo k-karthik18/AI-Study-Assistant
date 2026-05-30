@@ -2,13 +2,18 @@ import os
 import uuid
 import shutil
 from fastapi import APIRouter, File, UploadFile, HTTPException, Header
-from services import database
+from services import database, pdf_service, embedding_service, vector_store
+
 
 router = APIRouter()
 
 # Define the local directory to store uploaded PDF files
 UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+# Temporary directory for chunks until Phase 3
+VECTORSTORE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "vectorstore")
+os.makedirs(VECTORSTORE_DIR, exist_ok=True)
 
 @router.post("/upload")
 async def upload_pdf(
@@ -32,27 +37,41 @@ async def upload_pdf(
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
             
-        # Log success
         print(f"Saved file to {file_path}")
         
+        # Phase 2: Extract, clean, and chunk text
+        raw_text = pdf_service.extract_text_from_pdf(file_path)
+        if not raw_text.strip():
+            raise HTTPException(status_code=400, detail="Could not extract text from the PDF. It might be empty or image-based.")
+            
+        cleaned_text = pdf_service.clean_text(raw_text)
+        chunks = pdf_service.split_text_into_chunks(cleaned_text, chunk_size=300, overlap=50)
+        
+        actual_chunk_count = len(chunks)
+        
+        # Phase 3: Generate embeddings and save to FAISS vector store
+        embeddings = embedding_service.generate_embeddings(chunks)
+        vector_store.add_to_index(embeddings, chunks, x_user_id, doc_id)
+        
         # Save document metadata to Supabase
-        mock_chunk_count = 42 # Stub chunk count until Phase 2 is coded
         database.save_document(
             doc_id=doc_id,
             user_id=x_user_id,
             filename=file.filename,
-            chunk_count=mock_chunk_count
+            chunk_count=actual_chunk_count
         )
         
         # Return standard response
         return {
             "status": "success",
-            "message": "File successfully uploaded and stored.",
-            "chunk_count": mock_chunk_count, 
+            "message": "File successfully uploaded and processed.",
+            "chunk_count": actual_chunk_count, 
             "doc_id": doc_id,
             "filename": file.filename
         }
         
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"Error saving file: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to process file: {str(e)}")

@@ -85,11 +85,16 @@ export const apiService = {
    * Run RAGAS pipeline evaluation on the uploaded PDF
    * @param {string} docId Generated document GUID
    * @param {Array} dataset List of {question, ground_truth} benchmark targets
+   * @param {string} userId Clerk User ID
    */
-  evaluateRAG: async (docId, dataset) => {
+  evaluateRAG: async (docId, dataset, userId) => {
     const response = await api.post('/evaluate', {
       doc_id: docId,
       dataset,
+    }, {
+      headers: {
+        'X-User-ID': userId,
+      }
     });
     return response.data;
   },

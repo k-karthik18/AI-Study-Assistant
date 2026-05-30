@@ -90,7 +90,7 @@ export default function App() {
   if (isClerkEnabled && !isLoaded) {
     return (
       <div className="auth-loader-screen">
-        <Loader2 className="spinner text-primary" size={40} />
+        <Loader2 className="spinner" size={40} />
         <p>Syncing security session...</p>
         <style>{`
           .auth-loader-screen {
@@ -100,13 +100,13 @@ export default function App() {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: hsl(224, 71%, 4%);
-            color: white;
+            background-color: var(--bg-page, #F8F9FB);
+            color: var(--text-primary, #1A1A2E);
             gap: 16px;
           }
           .spinner {
             animation: spin 1.5s linear infinite;
-            color: hsl(263, 90%, 65%);
+            color: var(--accent-dark, #1A1A2E);
           }
           @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -121,8 +121,9 @@ export default function App() {
   if (isClerkEnabled && !user) {
     return (
       <div className="auth-login-screen">
-        <div className="auth-blur-circle primary-blur"></div>
-        <div className="auth-blur-circle secondary-blur"></div>
+        <div className="auth-bg-shape shape-1"></div>
+        <div className="auth-bg-shape shape-2"></div>
+        <div className="auth-bg-shape shape-3"></div>
 
         <div className="auth-card-container">
           <div className="auth-presentation-card">
@@ -158,30 +159,41 @@ export default function App() {
             position: relative;
             height: 100vh;
             width: 100vw;
-            background-color: hsl(224, 71%, 4%);
+            background-color: #F8F9FB;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
           }
-          .auth-blur-circle {
+          .auth-bg-shape {
             position: absolute;
-            width: 400px;
-            height: 400px;
             border-radius: 50%;
-            filter: blur(150px);
-            opacity: 0.12;
+            filter: blur(80px);
+            opacity: 0.15;
             z-index: 1;
           }
-          .primary-blur {
-            background-color: hsl(263, 90%, 65%);
-            top: -100px;
+          .shape-1 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            top: -150px;
             left: -100px;
           }
-          .secondary-blur {
-            background-color: hsl(190, 95%, 50%);
-            bottom: -100px;
-            right: -100px;
+          .shape-2 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #F97316, #EC4899);
+            bottom: -120px;
+            right: -80px;
+          }
+          .shape-3 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #1A1A2E, #2D2B55);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
           }
           .auth-card-container {
             position: relative;
@@ -189,47 +201,43 @@ export default function App() {
             display: grid;
             grid-template-columns: 1fr 1fr;
             max-width: 900px;
-            background: rgba(10, 15, 30, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
             border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
           }
           .auth-presentation-card {
             padding: 50px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            border-right: 1px solid rgba(255, 255, 255, 0.06);
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.02) 0%, transparent 100%);
+            border-right: 1px solid #E5E7EB;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, #FFFFFF 100%);
           }
           .large-logo {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, hsl(263, 90%, 65%) 0%, hsl(190, 95%, 50%) 100%);
+            background: linear-gradient(135deg, #1A1A2E 0%, #2D2B55 100%);
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
+            box-shadow: 0 4px 16px rgba(26, 26, 46, 0.2);
             margin-bottom: 24px;
           }
           .auth-title {
             font-family: 'Outfit', sans-serif;
             font-size: 2.2rem;
             font-weight: 800;
-            background: linear-gradient(to right, #fff 40%, hsl(215, 20%, 65%) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #1A1A2E;
             margin-bottom: 8px;
             letter-spacing: -0.03em;
           }
           .auth-subtitle {
-            font-size: 0.95rem;
-            color: hsl(190, 95%, 50%);
+            font-size: 0.9rem;
+            color: #6366F1;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -245,10 +253,10 @@ export default function App() {
             align-items: center;
             gap: 14px;
             font-size: 0.9rem;
-            color: hsl(215, 20%, 65%);
+            color: #6B7280;
           }
           .bullet svg {
-            color: hsl(263, 90%, 65%);
+            color: #2D2B55;
             flex-shrink: 0;
           }
           .auth-clerk-widget {
@@ -256,7 +264,7 @@ export default function App() {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(4, 6, 12, 0.4);
+            background: #FAFBFC;
           }
           @media (max-width: 800px) {
             .auth-card-container {
@@ -275,7 +283,7 @@ export default function App() {
   // 3. Authenticated Dashboard workspace
   return (
     <div className="app-container">
-      {/* Premium Top Navigation Bar */}
+      {/* Top Navigation Bar */}
       <header className="app-header">
         <div className="brand-section">
           <div className="brand-logo">
@@ -303,12 +311,6 @@ export default function App() {
               <span>Checking backend...</span>
             </div>
           )}
-          {/* {backendStatus === 'online' && (
-            // <div className="status-indicator online">
-            //   <Wifi size={14} />
-            //   <span>Backend Connected</span>
-            // </div>
-          )} */}
           {backendStatus === 'offline' && (
             <div className="status-indicator offline" title="Is FastAPI running at http://127.0.0.1:8000?">
               <WifiOff size={14} />
@@ -326,7 +328,7 @@ export default function App() {
         {/* Persistent Textbook Library List */}
         <div className="glass-panel library-panel">
           <h3 className="panel-title">
-            <BookOpen size={16} style={{ color: 'hsl(var(--primary))' }} />
+            <BookOpen size={16} style={{ color: '#2D2B55' }} />
             Textbook Library
           </h3>
 
@@ -363,7 +365,7 @@ export default function App() {
         </div>
 
         {/* live RAGAS dashboard */}
-        <EvalDashboard currentDoc={currentDoc} />
+        <EvalDashboard currentDoc={currentDoc} userId={userId} />
       </aside>
 
       {/* Main Workspace containing the chat panel */}
@@ -386,25 +388,24 @@ export default function App() {
         .user-welcome-text {
           font-size: 0.84rem;
           font-weight: 600;
-          color: hsl(var(--text-primary));
+          color: var(--text-primary);
         }
         .mock-avatar {
           width: 28px;
           height: 28px;
           border-radius: 50%;
-          background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+          background: var(--accent-gradient);
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 0.8rem;
           font-weight: 700;
           color: white;
-          border: 1px solid var(--border-glass);
         }
         .divider {
           width: 1px;
           height: 20px;
-          background: var(--border-glass);
+          background: var(--border);
         }
         .status-indicator {
           display: inline-flex;
@@ -418,26 +419,26 @@ export default function App() {
           transition: var(--transition-smooth);
         }
         .status-indicator.online {
-          background: rgba(16, 185, 129, 0.1);
-          color: hsl(var(--success));
-          border-color: rgba(16, 185, 129, 0.2);
+          background: var(--success-bg);
+          color: var(--success);
+          border-color: var(--success-border);
         }
         .status-indicator.offline {
-          background: rgba(239, 68, 68, 0.1);
-          color: hsl(var(--danger));
-          border-color: rgba(239, 68, 68, 0.2);
+          background: var(--danger-bg);
+          color: var(--danger);
+          border-color: var(--danger-border);
           cursor: help;
         }
         .status-indicator.checking {
-          background: rgba(255, 255, 255, 0.03);
-          color: hsl(var(--text-secondary));
-          border-color: var(--border-glass);
+          background: #F3F4F6;
+          color: var(--text-secondary);
+          border-color: var(--border);
         }
         .status-dot-pulse {
           width: 6px;
           height: 6px;
           border-radius: 50%;
-          background-color: hsl(var(--text-secondary));
+          background-color: var(--text-secondary);
           animation: pulse 1.5s infinite ease-in-out;
         }
 
@@ -453,7 +454,7 @@ export default function App() {
           justify-content: center;
           gap: 8px;
           font-size: 0.76rem;
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
           padding: 10px 0;
         }
         .empty-library {
@@ -462,7 +463,7 @@ export default function App() {
         }
         .empty-library p {
           font-size: 0.74rem;
-          color: hsl(var(--text-muted));
+          color: var(--text-muted);
           line-height: 1.4;
         }
         .library-list {
@@ -474,8 +475,8 @@ export default function App() {
           padding-right: 2px;
         }
         .library-item-card {
-          background: rgba(255, 255, 255, 0.01);
-          border: 1px solid var(--border-glass);
+          background: var(--bg-surface);
+          border: 1px solid var(--border);
           border-radius: var(--radius-sm);
           padding: 8px 12px;
           display: flex;
@@ -487,21 +488,21 @@ export default function App() {
           overflow: hidden;
         }
         .library-item-card:hover {
-          background: rgba(255, 255, 255, 0.03);
-          border-color: rgba(255, 255, 255, 0.12);
+          background: var(--bg-surface-hover);
+          border-color: var(--border-hover);
         }
         .library-item-card.active-card {
-          background: rgba(139, 92, 246, 0.05);
-          border-color: rgba(139, 92, 246, 0.35);
-          box-shadow: 0 4px 15px rgba(139, 92, 246, 0.05);
+          background: rgba(99, 102, 241, 0.06);
+          border-color: #6366F1;
+          box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
         }
         .lib-icon {
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
           flex-shrink: 0;
           transition: var(--transition-smooth);
         }
         .library-item-card.active-card .lib-icon {
-          color: hsl(var(--secondary));
+          color: #6366F1;
         }
         .lib-meta {
           display: flex;
@@ -512,21 +513,21 @@ export default function App() {
         .lib-name {
           font-size: 0.8rem;
           font-weight: 600;
-          color: hsl(var(--text-primary));
+          color: var(--text-primary);
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
         .lib-chunks {
           font-size: 0.65rem;
-          color: hsl(var(--text-muted));
+          color: var(--text-muted);
         }
         .active-dot {
           width: 5px;
           height: 5px;
           border-radius: 50%;
-          background-color: hsl(var(--secondary));
-          box-shadow: 0 0 8px hsl(var(--secondary));
+          background-color: #6366F1;
+          box-shadow: 0 0 6px rgba(99, 102, 241, 0.5);
         }
 
         .spinner {

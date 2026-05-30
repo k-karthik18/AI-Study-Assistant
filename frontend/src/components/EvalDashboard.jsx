@@ -27,7 +27,7 @@ const OS_BENCHMARK_DATASET = [
   { question: "What is the purpose of the Translation Lookaside Buffer (TLB)?", ground_truth: "The TLB is a high-speed hardware cache memory that stores recent translations of virtual memory addresses to physical memory addresses, bypassing slow page table lookups in RAM." }
 ];
 
-export default function EvalDashboard({ currentDoc }) {
+export default function EvalDashboard({ currentDoc, userId }) {
   const [loading, setLoading] = useState(false);
   const [scores, setScores] = useState(null); // { faithfulness, relevancy, precision, recall }
   const [showAccordion, setShowAccordion] = useState(false);
@@ -38,7 +38,7 @@ export default function EvalDashboard({ currentDoc }) {
     setLoading(true);
     try {
       // Call the backend /evaluate router endpoint
-      const result = await apiService.evaluateRAG(currentDoc.doc_id, OS_BENCHMARK_DATASET);
+      const result = await apiService.evaluateRAG(currentDoc.doc_id, OS_BENCHMARK_DATASET, userId);
       setScores({
         faithfulness: result.faithfulness,
         relevancy: result.answer_relevancy,
@@ -67,7 +67,7 @@ export default function EvalDashboard({ currentDoc }) {
   return (
     <div className="glass-panel dashboard-container">
       <h3 className="panel-title">
-        <BarChart3 size={18} style={{ color: 'hsl(var(--secondary))' }} />
+        <BarChart3 size={18} style={{ color: '#6366F1' }} />
         RAGAS Live Performance
       </h3>
 
@@ -101,7 +101,7 @@ export default function EvalDashboard({ currentDoc }) {
             <div className="scores-grid">
               <div className="summary-badge-container">
                 <div className="badge-card">
-                  <Award size={18} className="text-secondary" />
+                  <Award size={18} className="badge-icon" />
                   <div>
                     <span className="badge-card-title">Production Quality Passed</span>
                     <span className="badge-card-subtitle">Meets target portfolios limits</span>
@@ -191,7 +191,7 @@ export default function EvalDashboard({ currentDoc }) {
         }
         .empty-dashboard p {
           font-size: 0.8rem;
-          color: hsl(var(--text-muted));
+          color: var(--text-muted);
           line-height: 1.4;
         }
         .run-invitation {
@@ -200,7 +200,7 @@ export default function EvalDashboard({ currentDoc }) {
         }
         .invitation-text {
           font-size: 0.82rem;
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
           line-height: 1.5;
           margin-bottom: 16px;
         }
@@ -217,13 +217,13 @@ export default function EvalDashboard({ currentDoc }) {
         .loading-title {
           font-size: 0.9rem;
           font-weight: 600;
-          color: hsl(var(--text-primary));
+          color: var(--text-primary);
           margin-top: 12px;
           margin-bottom: 4px;
         }
         .loading-sub {
           font-size: 0.72rem;
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
         }
         
         /* SCORES GRAPHICS */
@@ -231,24 +231,27 @@ export default function EvalDashboard({ currentDoc }) {
           margin-bottom: 16px;
         }
         .badge-card {
-          background: rgba(6, 182, 212, 0.05);
-          border: 1px solid rgba(6, 182, 212, 0.15);
+          background: rgba(99, 102, 241, 0.06);
+          border: 1px solid rgba(99, 102, 241, 0.15);
           padding: 10px 14px;
           border-radius: var(--radius-md);
           display: flex;
           align-items: center;
           gap: 12px;
         }
+        .badge-icon {
+          color: #6366F1;
+        }
         .badge-card-title {
           display: block;
           font-size: 0.8rem;
           font-weight: 700;
-          color: #fff;
+          color: var(--text-primary);
         }
         .badge-card-subtitle {
           display: block;
           font-size: 0.68rem;
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
         }
 
         .metrics-list {
@@ -258,8 +261,8 @@ export default function EvalDashboard({ currentDoc }) {
           margin-bottom: 16px;
         }
         .metric-row-card {
-          background: rgba(255, 255, 255, 0.01);
-          border: 1px solid var(--border-glass);
+          background: var(--bg-page);
+          border: 1px solid var(--border);
           border-radius: var(--radius-md);
           padding: 12px 14px;
         }
@@ -273,12 +276,12 @@ export default function EvalDashboard({ currentDoc }) {
           display: block;
           font-size: 0.84rem;
           font-weight: 600;
-          color: #fff;
+          color: var(--text-primary);
         }
         .metric-desc {
           display: block;
           font-size: 0.68rem;
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
           margin-top: 1px;
         }
         .metric-values {
@@ -289,17 +292,17 @@ export default function EvalDashboard({ currentDoc }) {
           font-family: var(--font-heading);
           font-size: 1rem;
           font-weight: 700;
-          color: hsl(var(--secondary));
+          color: #6366F1;
         }
         .target-score {
           display: block;
           font-size: 0.62rem;
-          color: hsl(var(--text-muted));
+          color: var(--text-muted);
         }
 
         .metric-progress-track {
           height: 5px;
-          background: rgba(255, 255, 255, 0.05);
+          background: var(--bg-surface-hover);
           border-radius: 4px;
           overflow: hidden;
           margin-bottom: 8px;
@@ -310,10 +313,10 @@ export default function EvalDashboard({ currentDoc }) {
           transition: width 1s ease-in-out;
         }
         .pass-bar {
-          background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+          background: linear-gradient(90deg, #6366F1 0%, #8B5CF6 100%);
         }
         .fail-bar {
-          background: hsl(var(--danger));
+          background: var(--danger);
         }
         
         .metric-status-footer {
@@ -323,10 +326,10 @@ export default function EvalDashboard({ currentDoc }) {
           font-size: 0.68rem;
         }
         .text-success {
-          color: hsl(var(--success));
+          color: var(--success);
         }
         .text-danger {
-          color: hsl(var(--danger));
+          color: var(--danger);
         }
         .re-run-btn {
           width: 100%;
@@ -337,7 +340,7 @@ export default function EvalDashboard({ currentDoc }) {
 
         /* ACCORDION */
         .benchmark-accordion-section {
-          border-top: 1px solid var(--border-glass);
+          border-top: 1px solid var(--border);
           padding-top: 12px;
           margin-top: 12px;
         }
@@ -345,7 +348,7 @@ export default function EvalDashboard({ currentDoc }) {
           width: 100%;
           background: transparent;
           border: none;
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
           font-size: 0.74rem;
           font-weight: 600;
           cursor: pointer;
@@ -356,7 +359,7 @@ export default function EvalDashboard({ currentDoc }) {
           transition: var(--transition-smooth);
         }
         .accordion-toggle:hover {
-          color: white;
+          color: var(--text-primary);
         }
         .accordion-content {
           margin-top: 8px;
@@ -368,19 +371,19 @@ export default function EvalDashboard({ currentDoc }) {
           padding-right: 4px;
         }
         .accordion-item {
-          background: rgba(255, 255, 255, 0.015);
-          border: 1px solid var(--border-glass);
+          background: var(--bg-page);
+          border: 1px solid var(--border);
           border-radius: var(--radius-sm);
           padding: 8px 10px;
         }
         .item-question {
           font-size: 0.72rem;
-          color: #fff;
+          color: var(--text-primary);
           margin-bottom: 4px;
         }
         .item-answer {
           font-size: 0.68rem;
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
           line-height: 1.35;
         }
       `}</style>

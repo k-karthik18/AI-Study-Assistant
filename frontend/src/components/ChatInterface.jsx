@@ -239,7 +239,7 @@ export default function ChatInterface({ currentDoc, userId }) {
           display: flex;
           flex-direction: column;
           height: 100%;
-          background: rgba(4, 8, 16, 0.2);
+          background: var(--bg-page);
           position: relative;
         }
         .messages-area {
@@ -273,16 +273,14 @@ export default function ChatInterface({ currentDoc, userId }) {
           font-size: 0.85rem;
           font-weight: 600;
           flex-shrink: 0;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+          box-shadow: var(--shadow-md);
         }
         .assistant-avatar {
-          background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: var(--accent-gradient);
           color: white;
         }
         .user-avatar {
-          background: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--secondary) / 0.8) 100%);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
           color: white;
         }
         .message-bubble-wrapper {
@@ -296,20 +294,18 @@ export default function ChatInterface({ currentDoc, userId }) {
           font-size: 0.92rem;
           line-height: 1.5;
           position: relative;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+          box-shadow: var(--shadow-sm);
         }
         .user-bubble {
-          background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.9) 100%);
+          background: var(--accent-gradient);
           color: white;
           border-bottom-right-radius: 2px;
-          border: 1px solid rgba(139, 92, 246, 0.2);
         }
         .assistant-bubble {
-          background: rgba(13, 20, 38, 0.6);
-          border: 1px solid var(--border-glass);
-          color: hsl(var(--text-primary));
+          background: #F0F1F5;
+          border: 1px solid var(--border);
+          color: var(--text-primary);
           border-bottom-left-radius: 2px;
-          backdrop-filter: blur(8px);
         }
         .message-text {
           white-space: pre-wrap;
@@ -320,7 +316,7 @@ export default function ChatInterface({ currentDoc, userId }) {
           bottom: -22px;
           background: transparent;
           border: none;
-          color: hsl(var(--text-muted));
+          color: var(--text-muted);
           cursor: pointer;
           padding: 4px;
           border-radius: 4px;
@@ -331,14 +327,14 @@ export default function ChatInterface({ currentDoc, userId }) {
           opacity: 1;
         }
         .copy-btn:hover {
-          color: white;
-          background: rgba(255, 255, 255, 0.05);
+          color: var(--text-primary);
+          background: var(--bg-surface-hover);
         }
         .error-message-row {
-          background: rgba(239, 68, 68, 0.08);
-          border: 1px solid rgba(239, 68, 68, 0.2);
+          background: var(--danger-bg);
+          border: 1px solid var(--danger-border);
           border-radius: var(--radius-md);
-          color: hsl(var(--danger));
+          color: var(--danger);
           padding: 12px 18px;
           align-self: center;
           display: flex;
@@ -349,8 +345,8 @@ export default function ChatInterface({ currentDoc, userId }) {
         }
         /* RETRIEVED SOURCES */
         .sources-wrapper {
-          background: rgba(255, 255, 255, 0.015);
-          border: 1px solid var(--border-glass);
+          background: #FAFBFC;
+          border: 1px solid var(--border);
           border-radius: var(--radius-sm);
           padding: 10px;
           max-width: 600px;
@@ -361,7 +357,7 @@ export default function ChatInterface({ currentDoc, userId }) {
           gap: 6px;
           font-size: 0.72rem;
           font-weight: 600;
-          color: hsl(var(--secondary));
+          color: #6366F1;
           text-transform: uppercase;
           letter-spacing: 0.02em;
           margin-bottom: 6px;
@@ -373,21 +369,21 @@ export default function ChatInterface({ currentDoc, userId }) {
         }
         .source-item {
           font-size: 0.75rem;
-          background: rgba(255, 255, 255, 0.02);
+          background: #FFFFFF;
           padding: 6px 10px;
           border-radius: 4px;
-          border-left: 2px solid hsl(var(--secondary));
+          border-left: 2px solid #6366F1;
           display: flex;
           flex-direction: column;
           gap: 2px;
         }
         .source-index {
           font-weight: 700;
-          color: hsl(var(--text-muted));
+          color: var(--text-muted);
           font-size: 0.65rem;
         }
         .source-text {
-          color: hsl(var(--text-secondary));
+          color: var(--text-secondary);
           line-height: 1.4;
           white-space: pre-wrap;
         }
@@ -401,7 +397,7 @@ export default function ChatInterface({ currentDoc, userId }) {
         .dot {
           width: 6px;
           height: 6px;
-          background-color: hsl(var(--text-secondary));
+          background-color: var(--text-muted);
           border-radius: 50%;
           animation: typingWave 1.4s infinite ease-in-out;
         }
@@ -416,8 +412,8 @@ export default function ChatInterface({ currentDoc, userId }) {
         /* INPUT PANEL */
         .input-panel {
           padding: 20px 30px 24px 30px;
-          background: linear-gradient(to top, rgba(8, 12, 24, 0.8) 0%, transparent 100%);
-          border-top: 1px solid var(--border-glass);
+          background: linear-gradient(to top, var(--bg-page) 60%, transparent 100%);
+          border-top: 1px solid var(--border);
           position: relative;
         }
         .input-blocker {
@@ -426,7 +422,7 @@ export default function ChatInterface({ currentDoc, userId }) {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(8, 12, 24, 0.65);
+          background: rgba(248, 249, 251, 0.75);
           backdrop-filter: blur(2px);
           display: flex;
           align-items: center;
@@ -436,25 +432,27 @@ export default function ChatInterface({ currentDoc, userId }) {
         .input-blocker p {
           font-size: 0.82rem;
           font-weight: 500;
-          color: hsl(var(--text-muted));
-          background: rgba(0, 0, 0, 0.3);
-          border: 1px solid var(--border-glass);
+          color: var(--text-muted);
+          background: var(--bg-surface);
+          border: 1px solid var(--border);
           padding: 6px 16px;
           border-radius: 20px;
+          box-shadow: var(--shadow-sm);
         }
         .input-wrapper {
           position: relative;
           display: flex;
           align-items: center;
-          background: rgba(13, 20, 38, 0.8);
-          border: 1px solid var(--border-glass);
+          background: var(--bg-surface);
+          border: 1px solid var(--border);
           border-radius: var(--radius-md);
           overflow: hidden;
           transition: var(--transition-smooth);
+          box-shadow: var(--shadow-sm);
         }
         .input-wrapper:focus-within {
-          border-color: hsl(var(--primary));
-          box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+          border-color: #6366F1;
+          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
         .chat-input {
           flex: 1;
@@ -462,14 +460,14 @@ export default function ChatInterface({ currentDoc, userId }) {
           border: none;
           outline: none;
           padding: 16px 20px;
-          color: white;
+          color: var(--text-primary);
           font-size: 0.92rem;
         }
         .chat-input::placeholder {
-          color: hsl(var(--text-muted));
+          color: var(--text-muted);
         }
         .send-button {
-          background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%);
+          background: var(--accent-gradient);
           border: none;
           outline: none;
           color: white;
@@ -482,16 +480,21 @@ export default function ChatInterface({ currentDoc, userId }) {
           cursor: pointer;
           margin-right: 10px;
           transition: var(--transition-smooth);
+          box-shadow: 0 2px 6px rgba(26, 26, 46, 0.15);
         }
         .send-button:hover:not(.disabled) {
           transform: scale(1.05);
-          box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+          box-shadow: 0 4px 12px rgba(26, 26, 46, 0.25);
         }
         .send-button.disabled {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid var(--border-glass);
-          color: hsl(var(--text-muted));
+          background: var(--bg-surface-hover);
+          border: 1px solid var(--border);
+          color: var(--text-muted);
           cursor: not-allowed;
+          box-shadow: none;
+        }
+        .text-success {
+          color: var(--success);
         }
         @keyframes spin {
           0% { transform: rotate(0deg); }
