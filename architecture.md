@@ -9,7 +9,7 @@ This document details the system architecture, component design, and data flow o
 ```mermaid
 graph TD
     %% Frontend Layer
-    subgraph Frontend [Client Layer (React / Vite)]
+    subgraph Frontend [Client Layer React and Vite]
         UI[App Workspace UI]
         Clerk[Clerk Auth Widget]
         Uploader[Upload / URL Portal]
@@ -18,7 +18,7 @@ graph TD
     end
 
     %% API Layer
-    subgraph Backend [Server Layer (FastAPI)]
+    subgraph Backend [Server Layer FastAPI]
         API[FastAPI Router]
         PDF[PyMuPDF Text Extractor]
         Chunker[Text Cleaning & Chunker]
@@ -27,7 +27,7 @@ graph TD
     end
 
     %% Database & Storage Layer
-    subgraph Storage [Database & Indexing Layer]
+    subgraph Storage [Database and Indexing Layer]
         FAISS[(FAISS User Indices)]
         JSON[(JSON Chunk Metadata)]
         Supa[(Supabase PostgreSQL)]
