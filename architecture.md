@@ -6,51 +6,34 @@ This document details the system architecture, component design, and data flow o
 
 ## 🏗️ High-Level System Architecture
 
-```mermaid
-graph TD
-    %% Frontend Layer
-    subgraph Frontend [Client Layer React and Vite]
-        UI[App Workspace UI]
-        Clerk[Clerk Auth Widget]
-        Uploader[Upload / URL Portal]
-        Chat[Chat Interface]
-        Quiz[Study Assets Panel]
-    end
-
-    %% API Layer
-    subgraph Backend [Server Layer FastAPI]
-        API[FastAPI Router]
-        PDF[PyMuPDF Text Extractor]
-        Chunker[Text Cleaning & Chunker]
-        Embed[all-MiniLM-L6-v2 Embedder]
-        Hybrid[Hybrid Search Engine]
-    end
-
-    %% Database & Storage Layer
-    subgraph Storage [Database and Indexing Layer]
-        FAISS[(FAISS User Indices)]
-        JSON[(JSON Chunk Metadata)]
-        Supa[(Supabase PostgreSQL)]
-    end
-
-    %% External Services
-    subgraph External [AI Cloud Services]
-        Gemini[Google Gemini API]
-    end
-
-    %% Relations
-    UI --> Clerk
-    UI --> API
-    API --> PDF
-    PDF --> Chunker
-    Chunker --> Embed
-    Embed --> FAISS
-    Chunker --> JSON
-    API --> Supa
-    API --> Hybrid
-    Hybrid --> FAISS
-    Hybrid --> JSON
-    API --> Gemini
+```
++-------------------------------------------------------------+
+|                React / Vite Frontend Layer                  |
+|  - Workspace UI             - Clerk Auth Widget             |
+|  - Upload / URL Portal      - Chat Playground & Study Tabs  |
++-------------------------------------------------------------+
+                              │
+                              ▼ (HTTP Requests)
++-------------------------------------------------------------+
+|                FastAPI Backend API Layer                    |
+|  - API Route Router         - PyMuPDF Text Extractor        |
+|  - Regex Text Cleansing     - 300-word / 50-overlap Chunker |
++-------------------------------------------------------------+
+        │                       │                     │
+        ▼                       ▼                     ▼
++───────────────+       +───────────────+     +───────────────+
+| all-MiniLM-L6 |       |    Hybrid     |     |  Google cloud |
+| Embedder      |       |  Search Engine|     |  Gemini API   |
+| (Local model) |       | (FAISS + TFIDF|     |  (Grounded)   |
++───────────────+       +───────────────+     +───────────────+
+        │                       │                     │
+        ▼ (Saves Index)         ▼ (Queries Chunks)    ▼ (Synthesizes)
++─────────────────────────────────────────────────────────────+
+|               Data Persistence & Storage Layer              |
+|  - User Vector Store (backend/vectorstore/{user_id}.index)  |
+|  - Companion Metadata Map (backend/vectorstore/*_metadata)  |
+|  - Relational SQL Database (Supabase Cloud PostgreSQL Logs) |
++-------------------------------------------------------------+
 ```
 
 ---
