@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { GraduationCap, Wifi, WifiOff, BookOpen, History, Loader2, Sparkles } from 'lucide-react';
+import { GraduationCap, LogOut, Loader2, Sparkles, BookOpen, Settings } from 'lucide-react';
 import axios from 'axios';
-import { SignIn, UserButton, useUser } from '@clerk/clerk-react';
-import PDFUpload from './components/PDFUpload';
-import ChatInterface from './components/ChatInterface';
-import EvalDashboard from './components/EvalDashboard';
-import apiService from './services/api';
+import { SignIn, UserButton, useUser, SignOutButton } from '@clerk/clerk-react';
 
 export default function App() {
-  const [currentDoc, setCurrentDoc] = useState(null); // active document context
   const [backendStatus, setBackendStatus] = useState('checking'); // checking, online, offline
-  const [uploadedDocs, setUploadedDocs] = useState([]);
-  const [loadingDocs, setLoadingDocs] = useState(false);
 
   // Clerk authentication dynamic support
   const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -48,43 +41,9 @@ export default function App() {
     };
 
     checkBackendStatus();
-    const interval = setInterval(checkBackendStatus, 10000);
+    const interval = setInterval(checkBackendStatus, 15000);
     return () => clearInterval(interval);
   }, []);
-
-  // Fetch all user documents from Supabase
-  const fetchUserDocuments = async () => {
-    if (!userId || !isLoaded) return;
-    setLoadingDocs(true);
-    try {
-      const docs = await apiService.getDocuments(userId);
-      setUploadedDocs(docs);
-    } catch (err) {
-      console.error("Failed to fetch user documents:", err);
-    } finally {
-      setLoadingDocs(false);
-    }
-  };
-
-  useEffect(() => {
-    if (isLoaded) {
-      fetchUserDocuments();
-    }
-  }, [userId, isLoaded]);
-
-  const handleUploadSuccess = (docInfo) => {
-    setCurrentDoc(docInfo);
-    // Refresh the document library sidebar instantly
-    fetchUserDocuments();
-  };
-
-  const handleSelectDoc = (doc) => {
-    setCurrentDoc({
-      doc_id: doc.id,
-      filename: doc.filename,
-      chunk_count: doc.chunk_count
-    });
-  };
 
   // 1. Loading authentication state
   if (isClerkEnabled && !isLoaded) {
@@ -100,13 +59,14 @@ export default function App() {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: var(--bg-page, #F8F9FB);
-            color: var(--text-primary, #1A1A2E);
+            background-color: #0F172A;
+            color: #E2E8F0;
             gap: 16px;
+            font-family: sans-serif;
           }
           .spinner {
             animation: spin 1.5s linear infinite;
-            color: var(--accent-dark, #1A1A2E);
+            color: #6366F1;
           }
           @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -123,28 +83,23 @@ export default function App() {
       <div className="auth-login-screen">
         <div className="auth-bg-shape shape-1"></div>
         <div className="auth-bg-shape shape-2"></div>
-        <div className="auth-bg-shape shape-3"></div>
 
         <div className="auth-card-container">
           <div className="auth-presentation-card">
             <div className="brand-logo large-logo">
               <GraduationCap size={32} />
             </div>
-            <h1 className="auth-title">AI Study Assistant</h1>
-            <p className="auth-subtitle">RAG-Based PDF Textbook Chat System</p>
+            <h1 className="auth-title">StudyFlow AI</h1>
+            <p className="auth-subtitle">Active Research & Study Workspace</p>
 
             <div className="feature-bullets">
               <div className="bullet">
                 <Sparkles size={16} />
-                <span>Upload long PDFs and query concepts in real time</span>
-              </div>
-              <div className="bullet">
-                <History size={16} />
-                <span>Persistent database stores your chat threads forever</span>
+                <span>Interact with multi-format textbook materials</span>
               </div>
               <div className="bullet">
                 <BookOpen size={16} />
-                <span>Deeply objective RAGAS Live Metrics Evaluation</span>
+                <span>Automated practice quizzes & study flashcards</span>
               </div>
             </div>
           </div>
@@ -159,16 +114,17 @@ export default function App() {
             position: relative;
             height: 100vh;
             width: 100vw;
-            background-color: #F8F9FB;
+            background-color: #0B0F19;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            font-family: sans-serif;
           }
           .auth-bg-shape {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
+            filter: blur(120px);
             opacity: 0.15;
             z-index: 1;
           }
@@ -182,66 +138,55 @@ export default function App() {
           .shape-2 {
             width: 400px;
             height: 400px;
-            background: linear-gradient(135deg, #F97316, #EC4899);
+            background: linear-gradient(135deg, #EC4899, #F43F5E);
             bottom: -120px;
             right: -80px;
-          }
-          .shape-3 {
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(135deg, #1A1A2E, #2D2B55);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.05;
           }
           .auth-card-container {
             position: relative;
             z-index: 5;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            max-width: 900px;
-            background: #FFFFFF;
-            border: 1px solid #E5E7EB;
+            max-width: 850px;
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
             border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
           }
           .auth-presentation-card {
             padding: 50px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            border-right: 1px solid #E5E7EB;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, #FFFFFF 100%);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
           }
           .large-logo {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #1A1A2E 0%, #2D2B55 100%);
+            background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            box-shadow: 0 4px 16px rgba(26, 26, 46, 0.2);
             margin-bottom: 24px;
           }
           .auth-title {
-            font-family: 'Outfit', sans-serif;
             font-size: 2.2rem;
             font-weight: 800;
-            color: #1A1A2E;
-            margin-bottom: 8px;
+            color: #FFFFFF;
+            margin: 0 0 8px 0;
             letter-spacing: -0.03em;
           }
           .auth-subtitle {
             font-size: 0.9rem;
-            color: #6366F1;
+            color: #818CF8;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 32px;
+            margin: 0 0 32px 0;
           }
           .feature-bullets {
             display: flex;
@@ -253,10 +198,10 @@ export default function App() {
             align-items: center;
             gap: 14px;
             font-size: 0.9rem;
-            color: #6B7280;
+            color: #9CA3AF;
           }
           .bullet svg {
-            color: #2D2B55;
+            color: #818CF8;
             flex-shrink: 0;
           }
           .auth-clerk-widget {
@@ -264,7 +209,7 @@ export default function App() {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #FAFBFC;
+            background: rgba(10, 15, 30, 0.5);
           }
           @media (max-width: 800px) {
             .auth-card-container {
@@ -280,266 +225,195 @@ export default function App() {
     );
   }
 
-  // 3. Authenticated Dashboard workspace
+  // 3. Authenticated Dashboard Placeholder
   return (
     <div className="app-container">
-      {/* Top Navigation Bar */}
       <header className="app-header">
         <div className="brand-section">
           <div className="brand-logo">
             <GraduationCap size={20} />
           </div>
-          <span className="brand-name">AI Study Assistant</span>
-          <span className="brand-badge">RAG v1.0</span>
+          <span className="brand-name">StudyFlow AI</span>
+          <span className="brand-badge">SaaS Concept</span>
         </div>
 
-        <div className="connection-status-section">
-          <div className="user-profile-badge">
-            <span className="user-welcome-text">Hi, {userFullName}</span>
-            {isClerkEnabled ? (
-              <UserButton afterSignOutUrl="/" />
-            ) : (
-              <div className="mock-avatar">S</div>
-            )}
-          </div>
-
-          <span className="divider"></span>
-
-          {backendStatus === 'checking' && (
-            <div className="status-indicator checking">
-              <span className="status-dot-pulse"></span>
-              <span>Checking backend...</span>
-            </div>
-          )}
-          {backendStatus === 'offline' && (
-            <div className="status-indicator offline" title="Is FastAPI running at http://127.0.0.1:8000?">
-              <WifiOff size={14} />
-              <span>Backend Offline</span>
-            </div>
+        <div className="user-profile-badge">
+          <span className="user-welcome-text">Hi, {userFullName}</span>
+          {isClerkEnabled ? (
+            <UserButton afterSignOutUrl="/" />
+          ) : (
+            <div className="mock-avatar">S</div>
           )}
         </div>
       </header>
 
-      {/* Sidebar Panel containing Upload, Library, and Dashboard */}
-      <aside className="app-sidebar">
-        {/* Drag & Drop PDF Uploader */}
-        <PDFUpload onUploadSuccess={handleUploadSuccess} currentDoc={currentDoc} userId={userId} />
+      <main className="dashboard-placeholder">
+        <div className="placeholder-card">
+          <div className="icon-wrapper">
+            <Sparkles size={36} />
+          </div>
+          <h2>Welcome to StudyFlow AI</h2>
+          <p>
+            Your account is authenticated successfully. The interactive workspace, document library, and advanced RAG features are currently undergoing pivot redesign and will be implemented in the next phases.
+          </p>
+          <div className="status-badge">
+            <span className="status-dot"></span>
+            <span>API Server: {backendStatus.toUpperCase()}</span>
+          </div>
 
-        {/* Persistent Textbook Library List */}
-        <div className="glass-panel library-panel">
-          <h3 className="panel-title">
-            <BookOpen size={16} style={{ color: '#2D2B55' }} />
-            Textbook Library
-          </h3>
-
-          {loadingDocs && uploadedDocs.length === 0 ? (
-            <div className="library-loader">
-              <Loader2 className="spinner" size={16} />
-              <span>Syncing database...</span>
-            </div>
-          ) : uploadedDocs.length === 0 ? (
-            <div className="empty-library">
-              <p>Your library is empty. Upload a textbook PDF above to get started!</p>
-            </div>
-          ) : (
-            <div className="library-list">
-              {uploadedDocs.map((doc) => {
-                const isActive = currentDoc && currentDoc.doc_id === doc.id;
-                return (
-                  <div
-                    key={doc.id}
-                    className={`library-item-card ${isActive ? 'active-card' : ''}`}
-                    onClick={() => handleSelectDoc(doc)}
-                  >
-                    <BookOpen size={14} className="lib-icon" />
-                    <div className="lib-meta">
-                      <span className="lib-name" title={doc.filename}>{doc.filename}</span>
-                      <span className="lib-chunks">{doc.chunk_count} chunks</span>
-                    </div>
-                    {isActive && <div className="active-dot"></div>}
-                  </div>
-                );
-              })}
+          {!isClerkEnabled && (
+            <div className="mock-signout-btn">
+              <button onClick={() => alert("Mock sign out successful")}>
+                <LogOut size={16} />
+                <span>Mock Sign Out</span>
+              </button>
             </div>
           )}
         </div>
-
-        {/* live RAGAS dashboard */}
-        <EvalDashboard currentDoc={currentDoc} userId={userId} />
-      </aside>
-
-      {/* Main Workspace containing the chat panel */}
-      <main className="app-workspace">
-        <ChatInterface currentDoc={currentDoc} userId={userId} />
       </main>
 
       <style>{`
-        /* Header connection indicators styling */
-        .connection-status-section {
+        .app-container {
+          min-height: 100vh;
+          background-color: #090D16;
+          color: #F3F4F6;
+          display: flex;
+          flex-direction: column;
+          font-family: sans-serif;
+        }
+        .app-header {
           display: flex;
           align-items: center;
-          gap: 16px;
+          justify-content: space-between;
+          padding: 16px 32px;
+          background: rgba(17, 24, 39, 0.8);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(12px);
+        }
+        .brand-section {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .brand-logo {
+          width: 32px;
+          height: 32px;
+          background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+        }
+        .brand-name {
+          font-weight: 700;
+          font-size: 1.1rem;
+          letter-spacing: -0.02em;
+        }
+        .brand-badge {
+          background: rgba(99, 102, 241, 0.15);
+          color: #818CF8;
+          font-size: 0.7rem;
+          padding: 2px 8px;
+          border-radius: 12px;
+          font-weight: 600;
         }
         .user-profile-badge {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 12px;
         }
         .user-welcome-text {
-          font-size: 0.84rem;
-          font-weight: 600;
-          color: var(--text-primary);
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: #9CA3AF;
         }
         .mock-avatar {
-          width: 28px;
-          height: 28px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
-          background: var(--accent-gradient);
+          background: #4F46E5;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.8rem;
-          font-weight: 700;
-          color: white;
+          font-weight: bold;
         }
-        .divider {
-          width: 1px;
-          height: 20px;
-          background: var(--border);
+        .dashboard-placeholder {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 40px;
         }
-        .status-indicator {
+        .placeholder-card {
+          max-width: 500px;
+          background: rgba(17, 24, 39, 0.5);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+          border-radius: 20px;
+          padding: 40px;
+          text-align: center;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .icon-wrapper {
+          width: 72px;
+          height: 72px;
+          background: rgba(99, 102, 241, 0.1);
+          border-radius: 50%;
           display: inline-flex;
           align-items: center;
-          gap: 6px;
-          font-size: 0.76rem;
-          font-weight: 600;
-          padding: 4px 12px;
-          border-radius: 20px;
-          border: 1px solid transparent;
-          transition: var(--transition-smooth);
-        }
-        .status-indicator.online {
-          background: var(--success-bg);
-          color: var(--success);
-          border-color: var(--success-border);
-        }
-        .status-indicator.offline {
-          background: var(--danger-bg);
-          color: var(--danger);
-          border-color: var(--danger-border);
-          cursor: help;
-        }
-        .status-indicator.checking {
-          background: #F3F4F6;
-          color: var(--text-secondary);
-          border-color: var(--border);
-        }
-        .status-dot-pulse {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background-color: var(--text-secondary);
-          animation: pulse 1.5s infinite ease-in-out;
-        }
-
-        /* TEXTBOOK LIBRARY STYLES */
-        .library-panel {
-          max-height: 250px;
-          display: flex;
-          flex-direction: column;
-        }
-        .library-loader {
-          display: flex;
-          align-items: center;
           justify-content: center;
-          gap: 8px;
-          font-size: 0.76rem;
-          color: var(--text-secondary);
-          padding: 10px 0;
+          color: #818CF8;
+          margin-bottom: 24px;
         }
-        .empty-library {
-          padding: 8px 4px;
-          text-align: center;
+        .placeholder-card h2 {
+          font-size: 1.5rem;
+          margin: 0 0 12px 0;
+          font-weight: 700;
         }
-        .empty-library p {
-          font-size: 0.74rem;
-          color: var(--text-muted);
-          line-height: 1.4;
+        .placeholder-card p {
+          font-size: 0.9rem;
+          color: #9CA3AF;
+          line-height: 1.6;
+          margin: 0 0 24px 0;
         }
-        .library-list {
-          flex: 1;
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          padding-right: 2px;
-        }
-        .library-item-card {
-          background: var(--bg-surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-sm);
-          padding: 8px 12px;
-          display: flex;
+        .status-badge {
+          display: inline-flex;
           align-items: center;
-          gap: 10px;
-          cursor: pointer;
-          transition: var(--transition-smooth);
-          position: relative;
-          overflow: hidden;
-        }
-        .library-item-card:hover {
-          background: var(--bg-surface-hover);
-          border-color: var(--border-hover);
-        }
-        .library-item-card.active-card {
-          background: rgba(99, 102, 241, 0.06);
-          border-color: #6366F1;
-          box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
-        }
-        .lib-icon {
-          color: var(--text-secondary);
-          flex-shrink: 0;
-          transition: var(--transition-smooth);
-        }
-        .library-item-card.active-card .lib-icon {
-          color: #6366F1;
-        }
-        .lib-meta {
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          flex: 1;
-        }
-        .lib-name {
+          gap: 8px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          padding: 6px 16px;
+          border-radius: 20px;
           font-size: 0.8rem;
           font-weight: 600;
-          color: var(--text-primary);
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          color: #D1D5DB;
         }
-        .lib-chunks {
-          font-size: 0.65rem;
-          color: var(--text-muted);
-        }
-        .active-dot {
-          width: 5px;
-          height: 5px;
+        .status-dot {
+          width: 8px;
+          height: 8px;
           border-radius: 50%;
-          background-color: #6366F1;
-          box-shadow: 0 0 6px rgba(99, 102, 241, 0.5);
+          background-color: ${backendStatus === 'online' ? '#10B981' : '#EF4444'};
+          box-shadow: 0 0 8px ${backendStatus === 'online' ? '#10B981' : '#EF4444'};
         }
-
-        .spinner {
-          animation: spin 1.5s linear infinite;
+        .mock-signout-btn {
+          margin-top: 24px;
         }
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        .mock-signout-btn button {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: transparent;
+          border: 1px solid rgba(239, 68, 68, 0.4);
+          color: #F87171;
+          padding: 8px 16px;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 0.85rem;
+          font-weight: 600;
+          transition: background 0.2s;
         }
-        @keyframes pulse {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 1; }
+        .mock-signout-btn button:hover {
+          background: rgba(239, 68, 68, 0.1);
         }
       `}</style>
     </div>
