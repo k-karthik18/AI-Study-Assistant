@@ -95,9 +95,7 @@ export default function App() {
         <header className="landing-header">
           <div className="header-inner">
             <div className="brand-logo">
-              <div className="logo-box">
-                <GraduationCap size={16} />
-              </div>
+              <GraduationCap size={20} className="logo-icon-svg" />
               <span className="logo-text">StudyFlow AI</span>
             </div>
 
@@ -174,129 +172,157 @@ export default function App() {
               </button>
             </div>
 
+            {/* Core Stats / Tech Badges to fill Hero Space */}
+            <div className="hero-stats-badges">
+              <div className="stat-badge-card">
+                <span className="stat-val">384-Dim</span>
+                <span className="stat-lbl">Local Vector Embeddings</span>
+              </div>
+              <div className="stat-badge-card">
+                <span className="stat-val">Under 15ms</span>
+                <span className="stat-lbl">Retrieval Search Latency</span>
+              </div>
+              <div className="stat-badge-card">
+                <span className="stat-val">RAGAS</span>
+                <span className="stat-lbl">Double Grounding Audits</span>
+              </div>
+            </div>
+
             <a href="#sandbox" className="scroll-explorer">
-              <span>Scroll to explore UI</span>
+              <span>Scroll to explore</span>
               <ChevronDown size={18} className="scroll-arrow" />
             </a>
           </div>
         </section>
 
-        {/* HIGH CONTRAST SANDBOX PLAYGROUND PREVIEW (White Workspace) */}
+        {/* HIGH CONTRAST SANDBOX PLAYGROUND PREVIEW (White Workspace inside macOS Window) */}
         <section className="sandbox-section" id="sandbox">
           <div className="section-header">
             <h2>The Sandbox Workspace</h2>
             <p>Test drive our workspace features live. Click any tab below to switch views.</p>
           </div>
 
-          <div className="sandbox-wrapper">
-            <div className="sandbox-tabs">
-              <button 
-                className={`sandbox-tab-btn ${sandboxTab === 'chat' ? 'active' : ''}`}
-                onClick={() => setSandboxTab('chat')}
-              >
-                <Sparkles size={14} />
-                <span>AI Chat Playground</span>
-              </button>
-              <button 
-                className={`sandbox-tab-btn ${sandboxTab === 'quiz' ? 'active' : ''}`}
-                onClick={() => setSandboxTab('quiz')}
-              >
-                <BookOpen size={14} />
-                <span>Practice Quiz</span>
-              </button>
-              <button 
-                className={`sandbox-tab-btn ${sandboxTab === 'flashcards' ? 'active' : ''}`}
-                onClick={() => setSandboxTab('flashcards')}
-              >
-                <Clock size={14} />
-                <span>3D Flashcards</span>
-              </button>
+          {/* MAC OUTLAYER WRAPPER */}
+          <div className="mac-window-wrapper">
+            <div className="mac-title-bar">
+              <div className="mac-dots">
+                <span className="mac-dot-btn red"></span>
+                <span className="mac-dot-btn yellow"></span>
+                <span className="mac-dot-btn green"></span>
+              </div>
+              <div className="mac-title-text">Galvin_Operating_Systems_Chapter1.pdf — StudyFlow AI</div>
             </div>
 
-            <div className="sandbox-workspace">
-              {sandboxTab === 'chat' && (
-                <div className="sandbox-chat-view">
-                  <div className="sandbox-sidebar">
-                    <div className="sidebar-section-title">Active Source</div>
-                    <div className="mock-doc-card">
-                      <BookOpen size={12} />
-                      <span>Galvin_Operating_Systems.pdf</span>
-                    </div>
-                    <div className="sidebar-section-title mt-4">Document Chapters</div>
-                    <div className="chapter-list">
-                      <div className="chapter-item active">1. Introduction to OS</div>
-                      <div className="chapter-item">2. Process Management</div>
-                      <div className="chapter-item">3. Memory Layout</div>
-                    </div>
-                  </div>
-                  <div className="sandbox-chat-area">
-                    <div className="chat-window-inner">
-                      <div className="chat-message user-bubble">What is the difference between kernel and user mode?</div>
-                      <div className="chat-message bot-bubble">
-                        <div className="source-citation">
-                          <span>📚 Cited: Page 14 (OS Architecture)</span>
-                        </div>
-                        <p>
-                          The key difference is <strong>privilege levels</strong>:
-                        </p>
-                        <ul>
-                          <li><strong>Kernel Mode:</strong> Runs core OS operations with direct, unrestricted hardware access.</li>
-                          <li><strong>User Mode:</strong> Restricts user programs from accessing hardware directly to protect system stability.</li>
-                        </ul>
+            <div className="sandbox-wrapper">
+              <div className="sandbox-tabs">
+                <button 
+                  className={`sandbox-tab-btn ${sandboxTab === 'chat' ? 'active' : ''}`}
+                  onClick={() => setSandboxTab('chat')}
+                >
+                  <Sparkles size={14} />
+                  <span>AI Chat Playground</span>
+                </button>
+                <button 
+                  className={`sandbox-tab-btn ${sandboxTab === 'quiz' ? 'active' : ''}`}
+                  onClick={() => setSandboxTab('quiz')}
+                >
+                  <BookOpen size={14} />
+                  <span>Practice Quiz</span>
+                </button>
+                <button 
+                  className={`sandbox-tab-btn ${sandboxTab === 'flashcards' ? 'active' : ''}`}
+                  onClick={() => setSandboxTab('flashcards')}
+                >
+                  <Clock size={14} />
+                  <span>3D Flashcards</span>
+                </button>
+              </div>
+
+              <div className="sandbox-workspace">
+                {sandboxTab === 'chat' && (
+                  <div className="sandbox-chat-view">
+                    <div className="sandbox-sidebar">
+                      <div className="sidebar-section-title">Active Source</div>
+                      <div className="mock-doc-card">
+                        <BookOpen size={12} />
+                        <span>Galvin_Operating_Systems.pdf</span>
+                      </div>
+                      <div className="sidebar-section-title mt-4">Document Chapters</div>
+                      <div className="chapter-list">
+                        <div className="chapter-item active">1. Introduction to OS</div>
+                        <div className="chapter-item">2. Process Management</div>
+                        <div className="chapter-item">3. Memory Layout</div>
                       </div>
                     </div>
-                    <div className="chat-input-simulator">
-                      <span>Ask a question about this chapter...</span>
-                      <div className="send-btn-sim"><Play size={12} /></div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {sandboxTab === 'quiz' && (
-                <div className="sandbox-quiz-view">
-                  <div className="quiz-header-sim">
-                    <span>Practice Quiz: Operating Systems Chapter 1</span>
-                    <span className="quiz-score">Question 1 of 5</span>
-                  </div>
-                  <div className="quiz-card-sim">
-                    <p className="quiz-question">Which mode of CPU execution restricts direct access to hardware instructions?</p>
-                    <div className="quiz-options-sim">
-                      <div className="quiz-option-sim">A) Kernel Mode</div>
-                      <div className="quiz-option-sim correct">B) User Mode (Correct answer)</div>
-                      <div className="quiz-option-sim">C) System Mode</div>
-                      <div className="quiz-option-sim">D) Privileged Mode</div>
-                    </div>
-                    <div className="quiz-explanation-sim">
-                      <strong>Explanation:</strong> User mode runs applications with restricted privileges to prevent them from crashing or compromising hardware subsystems.
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {sandboxTab === 'flashcards' && (
-                <div className="sandbox-flash-view">
-                  <div className="flash-card-sim">
-                    <div className="flash-card-side front">
-                      <span className="card-label">Question</span>
-                      <p>What mechanism notifies the CPU that an event has occurred requiring attention?</p>
-                      <span className="card-action-hint">Click Card to Flip</span>
-                    </div>
-                    <div className="flash-card-side back-sim">
-                      <span className="card-label">Answer</span>
-                      <p>An Interrupt (Hardware signal or Software trap)</p>
-                      <div className="flash-grading">
-                        <span>Rate difficulty:</span>
-                        <div className="grades">
-                          <button className="btn-grade">Hard</button>
-                          <button className="btn-grade">Medium</button>
-                          <button className="btn-grade active">Easy</button>
+                    <div className="sandbox-chat-area">
+                      <div className="chat-window-inner">
+                        <div className="chat-message user-bubble">What is the difference between kernel and user mode?</div>
+                        <div className="chat-message bot-bubble">
+                          <div className="source-citation">
+                            <span>📚 Cited: Page 14 (OS Architecture)</span>
+                          </div>
+                          <p>
+                            The key difference is <strong>privilege levels</strong>:
+                          </p>
+                          <ul>
+                            <li><strong>Kernel Mode:</strong> Runs core OS operations with direct, unrestricted hardware access.</li>
+                            <li><strong>User Mode:</strong> Restricts user programs from accessing hardware directly to protect system stability.</li>
+                          </ul>
                         </div>
+                      </div>
+                      <div className="chat-input-simulator">
+                        <span>Ask a question about this chapter...</span>
+                        <div className="send-btn-sim"><Play size={12} /></div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+
+                {sandboxTab === 'quiz' && (
+                  <div className="sandbox-quiz-view">
+                    <div className="quiz-header-sim">
+                      <span>Practice Quiz: Operating Systems Chapter 1</span>
+                      <span className="quiz-score">Question 1 of 5</span>
+                    </div>
+                    <div className="quiz-card-sim">
+                      <p className="quiz-question">Which mode of CPU execution restricts direct access to hardware instructions?</p>
+                      <div className="quiz-options-sim">
+                        <div className="quiz-option-sim">A) Kernel Mode</div>
+                        <div className="quiz-option-sim correct">B) User Mode (Correct answer)</div>
+                        <div className="quiz-option-sim">C) System Mode</div>
+                        <div className="quiz-option-sim">D) Privileged Mode</div>
+                      </div>
+                      <div className="quiz-explanation-sim">
+                        <strong>Explanation:</strong> User mode runs applications with restricted privileges to prevent them from crashing or compromising hardware subsystems.
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {sandboxTab === 'flashcards' && (
+                  <div className="sandbox-flash-view">
+                    <div className="flash-card-sim">
+                      <div className="flash-card-side front">
+                        <span className="card-label">Question</span>
+                        <p>What mechanism notifies the CPU that an event has occurred requiring attention?</p>
+                        <span className="card-action-hint">Click Card to Flip</span>
+                      </div>
+                      <div className="flash-card-side back-sim">
+                        <span className="card-label">Answer</span>
+                        <p>An Interrupt (Hardware signal or Software trap)</p>
+                        <div className="flash-grading">
+                          <span>Rate difficulty:</span>
+                          <div className="grades">
+                            <button className="btn-grade">Hard</button>
+                            <button className="btn-grade">Medium</button>
+                            <button className="btn-grade active">Easy</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </section>
@@ -315,6 +341,11 @@ export default function App() {
               </div>
               <h3>Interactive AI Tutoring</h3>
               <p>Grounded RAG chat that answers questions using only the provided textbook, citing exact sources and page references.</p>
+              <ul className="card-bullets">
+                <li>Anti-hallucination guardrails</li>
+                <li>Hyperlinked page annotations</li>
+                <li>Chronological thread logs</li>
+              </ul>
             </div>
 
             <div className="feature-card">
@@ -323,6 +354,11 @@ export default function App() {
               </div>
               <h3>Active Practice Quizzes</h3>
               <p>Automatically generated multiple-choice tests with detailed explanations and grading to verify your understanding.</p>
+              <ul className="card-bullets">
+                <li>Real-time score counters</li>
+                <li>Step-by-step logic breakdown</li>
+                <li>Dynamic MCQ formatting</li>
+              </ul>
             </div>
 
             <div className="feature-card">
@@ -331,6 +367,11 @@ export default function App() {
               </div>
               <h3>Spaced Repetition Flashcards</h3>
               <p>Flip cards with memory retrieval scores ("Easy", "Medium", "Hard") that adapt study sessions to your pace.</p>
+              <ul className="card-bullets">
+                <li>3D flip active animations</li>
+                <li>Spaced-repetition engine</li>
+                <li>Workspace memory analytics</li>
+              </ul>
             </div>
           </div>
         </section>
@@ -347,21 +388,25 @@ export default function App() {
               <div className="tech-icon"><Cpu size={18} /></div>
               <h4>FastAPI Backend</h4>
               <p>Asynchronous Python service managing ingestion, prompt engineering, and API pipelines.</p>
+              <div className="tech-specs-sub">Runs local operations under 20ms without event-loop blocks.</div>
             </div>
             <div className="tech-card">
               <div className="tech-icon"><Sparkles size={18} /></div>
-              <h4>SentenceTransformers & FAISS</h4>
+              <h4>SentenceTransformers</h4>
               <p>Extracts 384-dimensional embeddings and executes vector similarity locally on disk.</p>
+              <div className="tech-specs-sub">Powered by all-MiniLM-L6-v2 running offline in-process.</div>
             </div>
             <div className="tech-card">
               <div className="tech-icon"><Database size={18} /></div>
               <h4>Supabase Postgres</h4>
               <p>Relational Postgres store holding documents metadata and chronological chat history.</p>
+              <div className="tech-specs-sub">Handles high-security structured transactional user logs.</div>
             </div>
             <div className="tech-card">
               <div className="tech-icon"><Key size={18} /></div>
               <h4>Gemini API & RAGAS</h4>
               <p>Grounded answer generation using Gemini, validated by real-time RAGAS evaluations.</p>
+              <div className="tech-specs-sub">Automated metric evaluations track LLM output fidelity.</div>
             </div>
           </div>
         </section>
@@ -373,15 +418,15 @@ export default function App() {
             <div className="usage-rules-list">
               <div className="rule-item">
                 <CheckCircle2 size={16} className="rule-icon" />
-                <span><strong>File Capacity:</strong> Free tier supports up to 3 active PDF documents in your library.</span>
+                <span><strong>File Capacity:</strong> Free tier supports up to 3 active PDF documents in your library. Add or remove resources from your storage tab at any time.</span>
               </div>
               <div className="rule-item">
                 <CheckCircle2 size={16} className="rule-icon" />
-                <span><strong>File Size:</strong> PDF uploads are limited to a maximum of 10MB per file.</span>
+                <span><strong>File Size:</strong> PDF uploads are limited to a maximum of 10MB per file to optimize local CPU matrix computation speeds.</span>
               </div>
               <div className="rule-item">
                 <CheckCircle2 size={16} className="rule-icon" />
-                <span><strong>Rate Quotas:</strong> Standard rate limits allow up to 15 questions or evaluations per minute.</span>
+                <span><strong>Rate Quotas:</strong> Standard rate limits allow up to 15 questions or evaluations per minute to respect external API key constraints.</span>
               </div>
             </div>
           </div>
@@ -485,22 +530,14 @@ export default function App() {
           .brand-logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             font-size: 1.1rem;
             font-weight: 700;
             letter-spacing: -0.02em;
             color: #FFFFFF;
             flex-shrink: 0;
           }
-          .logo-box {
-            width: 32px;
-            height: 32px;
-            background-color: #111827;
-            border: 1px solid #1F2937;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+          .logo-icon-svg {
             color: #FFFFFF;
             flex-shrink: 0;
           }
@@ -571,7 +608,7 @@ export default function App() {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 120px 24px 80px 24px;
+            padding: 140px 24px 80px 24px;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
@@ -595,7 +632,7 @@ export default function App() {
             font-size: 0.78rem;
             font-weight: 500;
             color: #9CA3AF;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
           }
           .sparkle {
             color: #818CF8;
@@ -639,6 +676,41 @@ export default function App() {
             opacity: 0.9;
             transform: translateY(-1px);
           }
+          
+          /* Hero stats ribbons to pack empty space */
+          .hero-stats-badges {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 48px;
+            flex-wrap: wrap;
+            width: 100%;
+          }
+          .stat-badge-card {
+            background-color: #0B0F19;
+            border: 1px solid #1F2937;
+            padding: 16px 24px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 180px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+          }
+          .stat-badge-card .stat-val {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+          }
+          .stat-badge-card .stat-lbl {
+            font-size: 0.72rem;
+            color: #6B7280;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+          }
+
           .scroll-explorer {
             display: inline-flex;
             flex-direction: column;
@@ -678,12 +750,50 @@ export default function App() {
             flex-direction: column;
             justify-content: center;
           }
+          
+          /* MAC WINDOW WRAPPER */
+          .mac-window-wrapper {
+            background-color: #1F2937;
+            border: 1px solid #374151;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px -10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+          }
+          .mac-title-bar {
+            background-color: #111827;
+            border-bottom: 1px solid #1F2937;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            position: relative;
+          }
+          .mac-dots {
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+          }
+          .mac-dot-btn {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+          }
+          .mac-dot-btn.red { background-color: #EF4444; }
+          .mac-dot-btn.yellow { background-color: #F59E0B; }
+          .mac-dot-btn.green { background-color: #10B981; }
+          .mac-title-text {
+            position: absolute;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.72rem;
+            color: #9CA3AF;
+            font-weight: 500;
+          }
+
           .sandbox-wrapper {
             background-color: #FFFFFF;
-            border: 1px solid #E5E7EB;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 30px 70px -10px rgba(99, 102, 241, 0.2);
             color: #1F2937;
           }
           .sandbox-tabs {
@@ -1050,7 +1160,19 @@ export default function App() {
             font-size: 0.84rem;
             color: #9CA3AF;
             line-height: 1.5;
+            margin: 0 0 16px 0;
+          }
+          .card-bullets {
             margin: 0;
+            padding-left: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+          }
+          .card-bullets li {
+            font-size: 0.76rem;
+            color: #6B7280;
+            font-weight: 500;
           }
 
           /* TECH SECTION - SCREEN SIZED */
@@ -1078,6 +1200,8 @@ export default function App() {
             border-radius: 12px;
             padding: 24px;
             transition: border-color 0.2s;
+            display: flex;
+            flex-direction: column;
           }
           .tech-card:hover {
             border-color: #374151;
@@ -1104,7 +1228,16 @@ export default function App() {
             font-size: 0.8rem;
             color: #9CA3AF;
             line-height: 1.5;
-            margin: 0;
+            margin: 0 0 12px 0;
+            flex: 1;
+          }
+          .tech-specs-sub {
+            font-size: 0.7rem;
+            color: #4B5563;
+            font-weight: 500;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 10px;
+            margin-top: auto;
           }
 
           /* USAGE LIMITS SECTION - SCREEN SIZED */
@@ -1259,6 +1392,20 @@ export default function App() {
             }
             .hero-subtitle {
               font-size: 0.95rem;
+            }
+            .hero-stats-badges {
+              margin-top: 24px;
+              gap: 12px;
+            }
+            .stat-badge-card {
+              min-width: 130px;
+              padding: 12px;
+            }
+            .stat-badge-card .stat-val {
+              font-size: 1.05rem;
+            }
+            .stat-badge-card .stat-lbl {
+              font-size: 0.65rem;
             }
             .sandbox-section, .features-section, .tech-section, .usage-section {
               padding: 60px 24px;
