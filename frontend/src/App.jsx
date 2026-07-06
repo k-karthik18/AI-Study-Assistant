@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { GraduationCap, ArrowRight, Sparkles, BookOpen, Clock, Activity, ShieldAlert, LogOut, CheckCircle2, Cpu, Database, Key, Play, Mail, Heart, ChevronDown, Menu, X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { GraduationCap, ArrowRight, Sparkles, BookOpen, Clock, Activity, ShieldAlert, LogOut, CheckCircle2, Cpu, Database, Key, Play, Mail, Heart, ChevronDown, Menu, X, ArrowUpRight, HelpCircle } from 'lucide-react';
 import axios from 'axios';
 import { SignIn, UserButton, useUser } from '@clerk/clerk-react';
 
@@ -7,6 +7,7 @@ export default function App() {
   const [backendStatus, setBackendStatus] = useState('checking'); // checking, online, offline
   const [sandboxTab, setSandboxTab] = useState('chat'); // chat, quiz, flashcards
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showScrollArrow, setShowScrollArrow] = useState(true);
 
   // Clerk authentication dynamic support
   const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -24,6 +25,87 @@ export default function App() {
     userId = user?.id || "user_mock123";
     userFullName = user?.fullName || user?.firstName || "Student";
   }
+
+  // --- Scroll Arrow Visibility ---
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setShowScrollArrow(false);
+      } else {
+        setShowScrollArrow(true);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // --- Sandbox Interactive Simulator Loop ---
+  const [simInput, setSimInput] = useState("");
+  const [simMessages, setSimMessages] = useState([
+    { role: 'system', content: 'Welcome to Galvin Operating Systems chatbot! Ask me anything.' }
+  ]);
+  const [simIsTyping, setSimIsTyping] = useState(false);
+  const simulationTimerRef = useRef(null);
+
+  const startSimulation = () => {
+    // Clear any active timers
+    if (simulationTimerRef.current) clearTimeout(simulationTimerRef.current);
+
+    const question = "What is the difference between kernel and user mode?";
+    const answer = `The key difference is execution privileges at the CPU hardware level:
+    
+• Kernel Mode: Runs core operating system software with full, unrestricted access to physical memory and hardware instructions.
+• User Mode: Runs standard student applications. Direct hardware access is prohibited to prevent malicious code or syntax crashes from freezing the computer.`;
+
+    let charIndex = 0;
+    setSimInput("");
+    setSimMessages([
+      { role: 'system', content: 'Galvin_Operating_Systems_Chapter1.pdf successfully loaded.' }
+    ]);
+
+    // Step 1: Type the user query letter by letter
+    const typeLetter = () => {
+      if (charIndex < question.length) {
+        setSimInput(prev => prev + question.charAt(charIndex));
+        charIndex++;
+        simulationTimerRef.current = setTimeout(typeLetter, 60);
+      } else {
+        // Step 2: Query fully typed, append message to conversation list after 600ms
+        simulationTimerRef.current = setTimeout(() => {
+          setSimMessages(prev => [...prev, { role: 'user', content: question }]);
+          setSimInput("");
+          // Step 3: Trigger typing indicator
+          setSimIsTyping(true);
+
+          // Step 4: Display cited response
+          simulationTimerRef.current = setTimeout(() => {
+            setSimIsTyping(false);
+            setSimMessages(prev => [...prev, {
+              role: 'bot',
+              citation: '📚 Cited: Page 14 (OS Architecture)',
+              content: answer
+            }]);
+
+            // Step 5: Wait 8 seconds before restarting the loop
+            simulationTimerRef.current = setTimeout(startSimulation, 8000);
+          }, 1500);
+        }, 600);
+      }
+    };
+
+    simulationTimerRef.current = setTimeout(typeLetter, 1000);
+  };
+
+  useEffect(() => {
+    if (sandboxTab === 'chat') {
+      startSimulation();
+    } else {
+      if (simulationTimerRef.current) clearTimeout(simulationTimerRef.current);
+    }
+    return () => {
+      if (simulationTimerRef.current) clearTimeout(simulationTimerRef.current);
+    };
+  }, [sandboxTab]);
 
   // Check connection to the FastAPI backend server on mount
   useEffect(() => {
@@ -104,7 +186,7 @@ export default function App() {
               <a href="#sandbox">Sandbox</a>
               <a href="#features">Features</a>
               <a href="#tech">Technology</a>
-              <a href="#rules">Rules</a>
+              <a href="#rules">Rules & FAQs</a>
             </nav>
 
             <div className="nav-actions">
@@ -139,7 +221,7 @@ export default function App() {
           )}
         </header>
 
-        {/* Hero Section - Height Maximized */}
+        {/* Hero Section - Screen Sized & Spacious */}
         <section className="hero-section" id="hero">
           <div className="hero-container-inner">
             <div className="announcement">
@@ -188,16 +270,18 @@ export default function App() {
               </div>
             </div>
 
-            <a href="#sandbox" className="scroll-explorer">
-              <span>Scroll to explore</span>
-              <ChevronDown size={18} className="scroll-arrow" />
-            </a>
+            {showScrollArrow && (
+              <a href="#sandbox" className="scroll-explorer animate-fade-in">
+                <span>Scroll to explore</span>
+                <ChevronDown size={18} className="scroll-arrow" />
+              </a>
+            )}
           </div>
         </section>
 
         {/* HIGH CONTRAST SANDBOX PLAYGROUND PREVIEW (White Workspace inside macOS Window) */}
         <section className="sandbox-section" id="sandbox">
-          <div className="section-header">
+          <div className="section-header-compact">
             <h2>The Sandbox Workspace</h2>
             <p>Test drive our workspace features live. Click any tab below to switch views.</p>
           </div>
@@ -256,22 +340,26 @@ export default function App() {
                     </div>
                     <div className="sandbox-chat-area">
                       <div className="chat-window-inner">
-                        <div className="chat-message user-bubble">What is the difference between kernel and user mode?</div>
-                        <div className="chat-message bot-bubble">
-                          <div className="source-citation">
-                            <span>📚 Cited: Page 14 (OS Architecture)</span>
+                        {simMessages.map((msg, index) => (
+                          <div key={index} className={`chat-message ${msg.role === 'user' ? 'user-bubble' : msg.role === 'system' ? 'system-bubble' : 'bot-bubble'}`}>
+                            {msg.citation && (
+                              <div className="source-citation">
+                                <span>{msg.citation}</span>
+                              </div>
+                            )}
+                            <p style={{ whiteSpace: 'pre-line', margin: 0 }}>{msg.content}</p>
                           </div>
-                          <p>
-                            The key difference is <strong>privilege levels</strong>:
-                          </p>
-                          <ul>
-                            <li><strong>Kernel Mode:</strong> Runs core OS operations with direct, unrestricted hardware access.</li>
-                            <li><strong>User Mode:</strong> Restricts user programs from accessing hardware directly to protect system stability.</li>
-                          </ul>
-                        </div>
+                        ))}
+                        {simIsTyping && (
+                          <div className="chat-message bot-bubble typing-dots">
+                            <span className="dot"></span>
+                            <span className="dot"></span>
+                            <span className="dot"></span>
+                          </div>
+                        )}
                       </div>
                       <div className="chat-input-simulator">
-                        <span>Ask a question about this chapter...</span>
+                        <span className="simulated-input-text">{simInput || "Ask a question about this chapter..."}</span>
                         <div className="send-btn-sim"><Play size={12} /></div>
                       </div>
                     </div>
@@ -327,7 +415,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* FEATURE GRID */}
+        {/* FEATURE GRID - Screen Sized and Dense */}
         <section className="features-section" id="features">
           <div className="section-header">
             <h2>Active study tools built for recall</h2>
@@ -376,7 +464,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* TECH OF THE WEB */}
+        {/* TECH OF THE WEB - Screen Sized and Dense */}
         <section className="tech-section" id="tech">
           <div className="section-header">
             <h2>The Tech Stack Behind StudyFlow AI</h2>
@@ -411,22 +499,50 @@ export default function App() {
           </div>
         </section>
 
-        {/* USAGE RULES */}
+        {/* USAGE & QUOTAS SECTION - Clean comparative grid layout to fill whitespace */}
         <section className="usage-section" id="rules">
-          <div className="usage-card">
-            <h3>Workspace Rules & Limits</h3>
-            <div className="usage-rules-list">
-              <div className="rule-item">
-                <CheckCircle2 size={16} className="rule-icon" />
-                <span><strong>File Capacity:</strong> Free tier supports up to 3 active PDF documents in your library. Add or remove resources from your storage tab at any time.</span>
+          <div className="section-header">
+            <h2>Workspace Quotas & FAQs</h2>
+            <p>Understand the local operational limits and system capacities built into StudyFlow.</p>
+          </div>
+
+          <div className="quota-faq-container">
+            <div className="quota-table-box">
+              <h3>System Capacity Matrix</h3>
+              <div className="quota-row">
+                <span className="quota-label">PDF Storage Capacity</span>
+                <span className="quota-val">3 active textbooks</span>
               </div>
-              <div className="rule-item">
-                <CheckCircle2 size={16} className="rule-icon" />
-                <span><strong>File Size:</strong> PDF uploads are limited to a maximum of 10MB per file to optimize local CPU matrix computation speeds.</span>
+              <div className="quota-row">
+                <span className="quota-label">Max File Size Limit</span>
+                <span className="quota-val">10MB per document</span>
               </div>
-              <div className="rule-item">
-                <CheckCircle2 size={16} className="rule-icon" />
-                <span><strong>Rate Quotas:</strong> Standard rate limits allow up to 15 questions or evaluations per minute to respect external API key constraints.</span>
+              <div className="quota-row">
+                <span className="quota-label">Vector Embedding Model</span>
+                <span className="quota-val">all-MiniLM-L6-v2</span>
+              </div>
+              <div className="quota-row">
+                <span className="quota-label">Query Generation Model</span>
+                <span className="quota-val">Gemini 2.5 Flash</span>
+              </div>
+              <div className="quota-row">
+                <span className="quota-label">Audit Engine</span>
+                <span className="quota-val">RAGAS Framework</span>
+              </div>
+            </div>
+
+            <div className="faq-accordions">
+              <div className="faq-item">
+                <h5>How does local vector storage work?</h5>
+                <p>We generate 384-dimensional vector points from textbook pages locally on our Python server and append them directly to a local FAISS flat index, keeping your study vaults secure.</p>
+              </div>
+              <div className="faq-item">
+                <h5>Why are uploads restricted to 10MB?</h5>
+                <p>Capping files at 10MB ensures that semantic chunks can be parsed and embedded on standard computing devices without causing excessive memory (RAM) load.</p>
+              </div>
+              <div className="faq-item">
+                <h5>What are the RAGAS audit scores?</h5>
+                <p>RAGAS runs evaluations checking context relevance and faithfulness parameters. If a response does not map to the textbook, the score flags it to verify correct sourcing.</p>
               </div>
             </div>
           </div>
@@ -632,7 +748,7 @@ export default function App() {
             font-size: 0.78rem;
             font-weight: 500;
             color: #9CA3AF;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
           }
           .sparkle {
             color: #818CF8;
@@ -712,6 +828,10 @@ export default function App() {
           }
 
           .scroll-explorer {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
             display: inline-flex;
             flex-direction: column;
             align-items: center;
@@ -722,8 +842,8 @@ export default function App() {
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-top: 60px;
-            transition: color 0.2s;
+            transition: color 0.2s, opacity 0.3s;
+            z-index: 20;
           }
           .scroll-explorer:hover {
             color: #FFFFFF;
@@ -735,20 +855,43 @@ export default function App() {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(4px); }
           }
+          .animate-fade-in {
+            animation: fadeIn 0.4s ease forwards;
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
 
-          /* SANDBOX PLAYGROUND PREVIEW - SCREEN SIZED */
+          /* SANDBOX PLAYGROUND PREVIEW - SCREEN SIZED & CENTERED */
           .sandbox-section {
             min-height: 100vh;
             padding: 100px 24px;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
-            width: 100%;
+            width: 90%;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
             display: flex;
             flex-direction: column;
             justify-content: center;
+          }
+          .section-header-compact {
+            text-align: center;
+            margin-bottom: 40px;
+          }
+          .section-header-compact h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin: 0 0 10px 0;
+            color: #FFFFFF;
+          }
+          .section-header-compact p {
+            font-size: 1rem;
+            color: #9CA3AF;
+            margin: 0;
           }
           
           /* MAC WINDOW WRAPPER */
@@ -916,6 +1059,16 @@ export default function App() {
             color: #374151;
             align-self: flex-start;
           }
+          .chat-message.system-bubble {
+            background-color: #F9FAFB;
+            border: 1px dashed #E5E7EB;
+            color: #9CA3AF;
+            align-self: center;
+            font-size: 0.76rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            max-width: 100%;
+          }
           .chat-message.bot-bubble p {
             margin: 0 0 10px 0;
           }
@@ -938,10 +1091,19 @@ export default function App() {
             padding: 12px 16px;
             border-radius: 8px;
             font-size: 0.8rem;
-            color: #9CA3AF;
+            color: #111827;
             display: flex;
             align-items: center;
             justify-content: space-between;
+          }
+          .simulated-input-text {
+            border-right: 2px solid #111827;
+            animation: caret-blink 0.8s steps(1) infinite;
+            padding-right: 2px;
+            font-weight: 500;
+          }
+          @keyframes caret-blink {
+            50% { border-color: transparent; }
           }
           .send-btn-sim {
             width: 24px;
@@ -952,6 +1114,30 @@ export default function App() {
             display: flex;
             align-items: center;
             justify-content: center;
+          }
+          
+          /* Typing dots animation */
+          .typing-dots {
+            display: flex;
+            gap: 4px;
+            padding: 12px 18px;
+            align-items: center;
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            align-self: flex-start;
+          }
+          .typing-dots .dot {
+            width: 6px;
+            height: 6px;
+            background-color: #9CA3AF;
+            border-radius: 50%;
+            animation: typing-dot-bounce 1.4s infinite ease-in-out both;
+          }
+          .typing-dots .dot:nth-child(1) { animation-delay: -0.32s; }
+          .typing-dots .dot:nth-child(2) { animation-delay: -0.16s; }
+          @keyframes typing-dot-bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
           }
 
           /* SANDBOX QUIZ VIEW */
@@ -1092,13 +1278,13 @@ export default function App() {
             color: #FFFFFF;
           }
 
-          /* FEATURES SECTION - SCREEN SIZED */
+          /* FEATURES SECTION - SCREEN SIZED & SPACIOUS */
           .features-section {
             min-height: 100vh;
             padding: 100px 24px;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
-            width: 100%;
+            width: 90%;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
@@ -1175,13 +1361,13 @@ export default function App() {
             font-weight: 500;
           }
 
-          /* TECH SECTION - SCREEN SIZED */
+          /* TECH SECTION - SCREEN SIZED & SPACIOUS */
           .tech-section {
             min-height: 100vh;
             padding: 100px 24px;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
-            width: 100%;
+            width: 90%;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
@@ -1240,13 +1426,13 @@ export default function App() {
             margin-top: auto;
           }
 
-          /* USAGE LIMITS SECTION - SCREEN SIZED */
+          /* USAGE MATRIX & FAQS SECTION - SCREEN SIZED & DENSE GRID */
           .usage-section {
             min-height: 100vh;
             padding: 100px 24px;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
-            width: 100%;
+            width: 90%;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
@@ -1254,37 +1440,69 @@ export default function App() {
             flex-direction: column;
             justify-content: center;
           }
-          .usage-card {
+          .quota-faq-container {
+            display: grid;
+            grid-template-columns: 1.2fr 1.8fr;
+            gap: 40px;
+            align-items: start;
+          }
+          .quota-table-box {
             background-color: #0B0F19;
             border: 1px solid #1F2937;
             border-radius: 16px;
-            padding: 40px;
+            padding: 30px;
           }
-          .usage-card h3 {
-            font-size: 1.25rem;
+          .quota-table-box h3 {
+            font-size: 1.1rem;
             font-weight: 700;
-            margin: 0 0 24px 0;
+            margin: 0 0 20px 0;
             color: #FFFFFF;
           }
-          .usage-rules-list {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-          }
-          .rule-item {
+          .quota-row {
             display: flex;
-            align-items: flex-start;
-            gap: 12px;
-          }
-          .rule-icon {
-            color: #10B981;
-            margin-top: 2px;
-            flex-shrink: 0;
-          }
-          .rule-item span {
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             font-size: 0.82rem;
+          }
+          .quota-row:last-child {
+            border-bottom: none;
+          }
+          .quota-label {
+            color: #9CA3AF;
+            font-weight: 500;
+          }
+          .quota-val {
+            color: #F9FAFB;
+            font-weight: 600;
+          }
+          
+          .faq-accordions {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+          }
+          .faq-item {
+            background-color: #0B0F19;
+            border: 1px solid #1F2937;
+            border-radius: 12px;
+            padding: 20px 24px;
+          }
+          .faq-item h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .faq-item p {
+            font-size: 0.8rem;
             color: #9CA3AF;
             line-height: 1.5;
+            margin: 0;
           }
 
           /* CLERK OVERLAY */
@@ -1410,6 +1628,7 @@ export default function App() {
             .sandbox-section, .features-section, .tech-section, .usage-section {
               padding: 60px 24px;
               min-height: auto; /* Allow auto height on small devices */
+              width: 100%;
             }
             .sandbox-chat-view {
               grid-template-columns: 1fr;
@@ -1430,8 +1649,9 @@ export default function App() {
             .tech-grid {
               grid-template-columns: 1fr;
             }
-            .usage-rules-list {
+            .quota-faq-container {
               grid-template-columns: 1fr;
+              gap: 24px;
             }
             .footer-content {
               flex-direction: column;
