@@ -425,7 +425,7 @@ export default function App() {
           <div className="features-grid">
             <div className="feature-card">
               <div className="feature-icon">
-                <Sparkles size={20} />
+                <Sparkles size={24} />
               </div>
               <h3>Interactive AI Tutoring</h3>
               <p>Grounded RAG chat that answers questions using only the provided textbook, citing exact sources and page references.</p>
@@ -438,7 +438,7 @@ export default function App() {
 
             <div className="feature-card">
               <div className="feature-icon">
-                <BookOpen size={20} />
+                <BookOpen size={24} />
               </div>
               <h3>Active Practice Quizzes</h3>
               <p>Automatically generated multiple-choice tests with detailed explanations and grading to verify your understanding.</p>
@@ -451,7 +451,7 @@ export default function App() {
 
             <div className="feature-card">
               <div className="feature-icon">
-                <Clock size={20} />
+                <Clock size={24} />
               </div>
               <h3>Spaced Repetition Flashcards</h3>
               <p>Flip cards with memory retrieval scores ("Easy", "Medium", "Hard") that adapt study sessions to your pace.</p>
@@ -473,25 +473,25 @@ export default function App() {
 
           <div className="tech-grid">
             <div className="tech-card">
-              <div className="tech-icon"><Cpu size={18} /></div>
+              <div className="tech-icon"><Cpu size={22} /></div>
               <h4>FastAPI Backend</h4>
               <p>Asynchronous Python service managing ingestion, prompt engineering, and API pipelines.</p>
               <div className="tech-specs-sub">Runs local operations under 20ms without event-loop blocks.</div>
             </div>
             <div className="tech-card">
-              <div className="tech-icon"><Sparkles size={18} /></div>
+              <div className="tech-icon"><Sparkles size={22} /></div>
               <h4>SentenceTransformers</h4>
               <p>Extracts 384-dimensional embeddings and executes vector similarity locally on disk.</p>
               <div className="tech-specs-sub">Powered by all-MiniLM-L6-v2 running offline in-process.</div>
             </div>
             <div className="tech-card">
-              <div className="tech-icon"><Database size={18} /></div>
+              <div className="tech-icon"><Database size={22} /></div>
               <h4>Supabase Postgres</h4>
               <p>Relational Postgres store holding documents metadata and chronological chat history.</p>
               <div className="tech-specs-sub">Handles high-security structured transactional user logs.</div>
             </div>
             <div className="tech-card">
-              <div className="tech-icon"><Key size={18} /></div>
+              <div className="tech-icon"><Key size={22} /></div>
               <h4>Gemini API & RAGAS</h4>
               <p>Grounded answer generation using Gemini, validated by real-time RAGAS evaluations.</p>
               <div className="tech-specs-sub">Automated metric evaluations track LLM output fidelity.</div>
@@ -558,7 +558,7 @@ export default function App() {
             </div>
             
             <div className="footer-links">
-              <a href="mailto:karthik.kosuri18@gmail.com" title="Gmail Connection">
+              <a href="mailto:kosurikarthik07@gmail.com" title="Gmail Connection">
                 <Mail size={16} />
                 <span>Email</span>
               </a>
@@ -867,9 +867,9 @@ export default function App() {
           .sandbox-section {
             min-height: 100vh;
             padding: 100px 24px;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
-            width: 90%;
+            width: 92%;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
@@ -882,14 +882,14 @@ export default function App() {
             margin-bottom: 40px;
           }
           .section-header-compact h2 {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             font-weight: 700;
             letter-spacing: -0.03em;
             margin: 0 0 10px 0;
             color: #FFFFFF;
           }
           .section-header-compact p {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: #9CA3AF;
             margin: 0;
           }
@@ -1282,9 +1282,9 @@ export default function App() {
           .features-section {
             min-height: 100vh;
             padding: 100px 24px;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
-            width: 90%;
+            width: 92%;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
@@ -1297,14 +1297,14 @@ export default function App() {
             margin-bottom: 60px;
           }
           .section-header h2 {
-            font-size: 2.2rem;
+            font-size: 2.6rem;
             font-weight: 700;
             letter-spacing: -0.03em;
             margin: 0 0 12px 0;
             color: #FFFFFF;
           }
           .section-header p {
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: #9CA3AF;
             margin: 0 auto;
             max-width: 500px;
@@ -1312,51 +1312,52 @@ export default function App() {
           .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 32px;
           }
           .feature-card {
             background-color: #0B0F19;
             border: 1px solid #1F2937;
-            border-radius: 12px;
-            padding: 30px;
-            transition: border-color 0.2s;
+            border-radius: 16px;
+            padding: 40px;
+            transition: border-color 0.2s, transform 0.2s;
           }
           .feature-card:hover {
             border-color: #374151;
+            transform: translateY(-2px);
           }
           .feature-icon {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             background-color: #111827;
             border: 1px solid #1F2937;
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #FFFFFF;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
           }
           .feature-card h3 {
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin: 0 0 10px 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0 0 12px 0;
             color: #FFFFFF;
           }
           .feature-card p {
-            font-size: 0.84rem;
+            font-size: 0.95rem;
             color: #9CA3AF;
-            line-height: 1.5;
-            margin: 0 0 16px 0;
+            line-height: 1.6;
+            margin: 0 0 20px 0;
           }
           .card-bullets {
             margin: 0;
             padding-left: 16px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
           }
           .card-bullets li {
-            font-size: 0.76rem;
+            font-size: 0.85rem;
             color: #6B7280;
             font-weight: 500;
           }
@@ -1365,9 +1366,9 @@ export default function App() {
           .tech-section {
             min-height: 100vh;
             padding: 100px 24px;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
-            width: 90%;
+            width: 92%;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
@@ -1378,51 +1379,53 @@ export default function App() {
           .tech-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            gap: 24px;
           }
           .tech-card {
             background-color: #0B0F19;
             border: 1px solid #1F2937;
-            border-radius: 12px;
-            padding: 24px;
-            transition: border-color 0.2s;
+            border-radius: 16px;
+            padding: 32px;
+            transition: border-color 0.2s, transform 0.2s;
             display: flex;
             flex-direction: column;
+            min-height: 250px;
           }
           .tech-card:hover {
             border-color: #374151;
+            transform: translateY(-2px);
           }
           .tech-icon {
-            width: 36px;
-            height: 36px;
+            width: 44px;
+            height: 44px;
             background-color: #111827;
             border: 1px solid #1F2937;
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #FFFFFF;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
           }
           .tech-card h4 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin: 0 0 8px 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
             color: #FFFFFF;
           }
           .tech-card p {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: #9CA3AF;
-            line-height: 1.5;
-            margin: 0 0 12px 0;
+            line-height: 1.55;
+            margin: 0 0 16px 0;
             flex: 1;
           }
           .tech-specs-sub {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             color: #4B5563;
             font-weight: 500;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
-            padding-top: 10px;
+            padding-top: 12px;
             margin-top: auto;
           }
 
@@ -1430,9 +1433,9 @@ export default function App() {
           .usage-section {
             min-height: 100vh;
             padding: 100px 24px;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
-            width: 90%;
+            width: 92%;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
@@ -1645,9 +1648,11 @@ export default function App() {
             }
             .features-grid {
               grid-template-columns: 1fr;
+              gap: 20px;
             }
             .tech-grid {
               grid-template-columns: 1fr;
+              gap: 20px;
             }
             .quota-faq-container {
               grid-template-columns: 1fr;
@@ -1663,7 +1668,7 @@ export default function App() {
     );
   }
 
-  // 3. Authenticated Workspace Dashboard Placeholder (will plan full UI later)
+  // 3. Workspace Dashboard
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
