@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { GraduationCap, ArrowRight, Sparkles, BookOpen, Clock, Activity, ShieldAlert, LogOut, CheckCircle2, Cpu, Database, Key, Play } from 'lucide-react';
+import { GraduationCap, ArrowRight, Sparkles, BookOpen, Clock, Activity, ShieldAlert, LogOut, CheckCircle2, Cpu, Database, Key, Play, Mail, Linkedin, Github, Heart, ChevronDown, Menu, X } from 'lucide-react';
 import axios from 'axios';
 import { SignIn, UserButton, useUser } from '@clerk/clerk-react';
 
 export default function App() {
   const [backendStatus, setBackendStatus] = useState('checking'); // checking, online, offline
   const [sandboxTab, setSandboxTab] = useState('chat'); // chat, quiz, flashcards
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Clerk authentication dynamic support
   const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -90,28 +91,25 @@ export default function App() {
         <div className="radial-spotlight spotlight-1"></div>
         <div className="radial-spotlight spotlight-2"></div>
 
-        {/* Fixed Header Navigation */}
+        {/* Fixed Header Navigation - Solid Solid Black */}
         <header className="landing-header">
           <div className="header-inner">
             <div className="brand-logo">
               <div className="logo-box">
                 <GraduationCap size={16} />
               </div>
-              <span>StudyFlow AI</span>
+              <span className="logo-text">StudyFlow AI</span>
             </div>
 
             <nav className="nav-links">
+              <a href="#hero">Home</a>
+              <a href="#sandbox">Sandbox</a>
               <a href="#features">Features</a>
-              <a href="#sandbox">Sandbox Workspace</a>
               <a href="#tech">Technology</a>
-              <a href="#rules">Limits & Rules</a>
+              <a href="#rules">Rules</a>
             </nav>
 
             <div className="nav-actions">
-              <span className="api-badge">
-                <span className={`status-dot ${backendStatus === 'online' ? 'online' : 'offline'}`}></span>
-                <span>API: {backendStatus.toUpperCase()}</span>
-              </span>
               <button 
                 className="btn-signin"
                 onClick={() => {
@@ -124,46 +122,72 @@ export default function App() {
               >
                 Sign In
               </button>
+
+              <button className="menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              </button>
             </div>
           </div>
+
+          {/* Mobile Navigation Dropdown */}
+          {mobileMenuOpen && (
+            <div className="mobile-nav">
+              <a href="#hero" onClick={() => setMobileMenuOpen(false)}>Home</a>
+              <a href="#sandbox" onClick={() => setMobileMenuOpen(false)}>Sandbox</a>
+              <a href="#features" onClick={() => setMobileMenuOpen(false)}>Features</a>
+              <a href="#tech" onClick={() => setMobileMenuOpen(false)}>Technology</a>
+              <a href="#rules" onClick={() => setMobileMenuOpen(false)}>Rules</a>
+            </div>
+          )}
         </header>
 
-        {/* Hero Section */}
+        {/* Hero Section - Height Maximized */}
         <section className="hero-section" id="hero">
-          <div className="announcement">
-            <span className="badge-glow"></span>
-            <Sparkles size={12} className="sparkle" />
-            <span>Grounded active recall learning engine</span>
-          </div>
+          <div className="hero-container-inner">
+            <div className="announcement">
+              <Sparkles size={12} className="sparkle" />
+              <span>Grounded active recall learning engine</span>
+            </div>
 
-          <h1 className="hero-title">
-            Turn your textbooks <br className="hero-br" />
-            into <span className="text-gradient">interactive study spaces</span>
-          </h1>
+            <h1 className="hero-title">
+              Turn your textbooks <br />
+              into <span className="text-gradient">interactive study spaces</span>
+            </h1>
 
-          <p className="hero-subtitle">
-            Upload PDFs or lecture transcripts to instantly generate active-recall flashcards, practice quizzes, and an AI tutor grounded strictly in your coursework.
-          </p>
+            <p className="hero-subtitle">
+              Upload PDFs or lecture transcripts to instantly generate active-recall flashcards, practice quizzes, and an AI tutor grounded strictly in your coursework.
+            </p>
 
-          <div className="cta-wrapper">
-            <button 
-              className="btn-primary-hero"
-              onClick={() => {
-                if (isClerkEnabled) {
-                  window.location.hash = "#/sign-in";
-                } else {
-                  alert("Running in Mock Mode. Set your Clerk publishable key to sign in.");
-                }
-              }}
-            >
-              <span>Get Started for Free</span>
-              <ArrowRight size={16} />
-            </button>
+            <div className="cta-wrapper">
+              <button 
+                className="btn-primary-hero"
+                onClick={() => {
+                  if (isClerkEnabled) {
+                    window.location.hash = "#/sign-in";
+                  } else {
+                    alert("Running in Mock Mode. Set your Clerk publishable key to sign in.");
+                  }
+                }}
+              >
+                <span>Get Started for Free</span>
+                <ArrowRight size={16} />
+              </button>
+            </div>
+
+            <a href="#sandbox" className="scroll-explorer">
+              <span>Scroll to explore UI</span>
+              <ChevronDown size={18} className="scroll-arrow" />
+            </a>
           </div>
         </section>
 
         {/* HIGH CONTRAST SANDBOX PLAYGROUND PREVIEW (White Workspace) */}
         <section className="sandbox-section" id="sandbox">
+          <div className="section-header">
+            <h2>The Sandbox Workspace</h2>
+            <p>Test drive our workspace features live. Click any tab below to switch views.</p>
+          </div>
+
           <div className="sandbox-wrapper">
             <div className="sandbox-tabs">
               <button 
@@ -331,7 +355,7 @@ export default function App() {
             </div>
             <div className="tech-card">
               <div className="tech-icon"><Database size={18} /></div>
-              <h4>Supabase PGVector</h4>
+              <h4>Supabase Postgres</h4>
               <p>Relational Postgres store holding documents metadata and chronological chat history.</p>
             </div>
             <div className="tech-card">
@@ -363,9 +387,30 @@ export default function App() {
           </div>
         </section>
 
-        {/* Footer */}
+        {/* Footer with customized user details */}
         <footer className="landing-footer">
-          <p>© 2026 StudyFlow AI. Designed for modern active-recall learning. All rights reserved.</p>
+          <div className="footer-content">
+            <div className="footer-credit">
+              <span>Made with </span>
+              <Heart size={14} className="heart-icon" />
+              <span> by <strong>Karthik K</strong></span>
+            </div>
+            
+            <div className="footer-links">
+              <a href="mailto:karthik.kosuri18@gmail.com" title="Gmail Connection">
+                <Mail size={16} />
+                <span>Email</span>
+              </a>
+              <a href="https://linkedin.com/in/karthik-kosuri" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile">
+                <Linkedin size={16} />
+                <span>LinkedIn</span>
+              </a>
+              <a href="https://github.com/k-karthik18/AI-Study-Assistant" target="_blank" rel="noopener noreferrer" title="GitHub Codebase">
+                <Github size={16} />
+                <span>GitHub Code</span>
+              </a>
+            </div>
+          </div>
         </footer>
 
         {/* Clerk Sign-in Overlay */}
@@ -388,6 +433,7 @@ export default function App() {
             position: relative;
             overflow-y: auto;
             width: 100vw;
+            scroll-behavior: smooth;
           }
 
           /* GLOWS */
@@ -412,16 +458,15 @@ export default function App() {
             right: -100px;
           }
 
-          /* HEADER - FIXED NAVIGATION BAR */
+          /* HEADER - SOLID BLACK NAVBAR WITH INLINE LOGO */
           .landing-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 100;
-            background-color: rgba(3, 7, 18, 0.8);
+            background-color: #000000;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
           }
           .header-inner {
             display: flex;
@@ -436,14 +481,16 @@ export default function App() {
           .brand-logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.05rem;
+            gap: 12px;
+            font-size: 1.1rem;
             font-weight: 700;
             letter-spacing: -0.02em;
+            color: #FFFFFF;
+            flex-shrink: 0;
           }
           .logo-box {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             background-color: #111827;
             border: 1px solid #1F2937;
             border-radius: 8px;
@@ -451,6 +498,10 @@ export default function App() {
             align-items: center;
             justify-content: center;
             color: #FFFFFF;
+            flex-shrink: 0;
+          }
+          .logo-text {
+            white-space: nowrap;
           }
           .nav-links {
             display: flex;
@@ -472,36 +523,11 @@ export default function App() {
             align-items: center;
             gap: 16px;
           }
-          .api-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background-color: #111827;
-            border: 1px solid #1F2937;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.74rem;
-            font-weight: 500;
-            color: #9CA3AF;
-          }
-          .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-          }
-          .status-dot.online {
-            background-color: #10B981;
-            box-shadow: 0 0 6px #10B981;
-          }
-          .status-dot.offline {
-            background-color: #EF4444;
-            box-shadow: 0 0 6px #EF4444;
-          }
           .btn-signin {
             background: none;
             border: 1px solid #374151;
             color: #F9FAFB;
-            padding: 8px 16px;
+            padding: 8px 18px;
             border-radius: 8px;
             font-size: 0.85rem;
             font-weight: 600;
@@ -512,15 +538,47 @@ export default function App() {
             background-color: #111827;
             border-color: #4B5563;
           }
+          .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #F9FAFB;
+            cursor: pointer;
+          }
+          .mobile-nav {
+            display: none;
+            flex-direction: column;
+            background-color: #000000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px 40px;
+            gap: 12px;
+          }
+          .mobile-nav a {
+            color: #9CA3AF;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 6px 0;
+          }
 
-          /* HERO */
+          /* HERO SECTION - SCREEN SIZED */
           .hero-section {
-            padding: 150px 24px 40px 24px;
-            text-align: center;
-            max-width: 850px;
-            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 24px;
+            box-sizing: border-box;
             position: relative;
             z-index: 10;
+          }
+          .hero-container-inner {
+            text-align: center;
+            max-width: 850px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
           }
           .announcement {
             display: inline-flex;
@@ -533,17 +591,17 @@ export default function App() {
             font-size: 0.78rem;
             font-weight: 500;
             color: #9CA3AF;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
           }
           .sparkle {
             color: #818CF8;
           }
           .hero-title {
-            font-size: 3.2rem;
+            font-size: 3.8rem;
             font-weight: 800;
-            line-height: 1.15;
+            line-height: 1.12;
             letter-spacing: -0.04em;
-            margin: 0 0 20px 0;
+            margin: 0 0 24px 0;
             color: #FFFFFF;
           }
           .text-gradient {
@@ -552,11 +610,11 @@ export default function App() {
             -webkit-text-fill-color: transparent;
           }
           .hero-subtitle {
-            font-size: 1.05rem;
+            font-size: 1.15rem;
             color: #9CA3AF;
             line-height: 1.6;
-            margin: 0 auto 36px auto;
-            max-width: 600px;
+            margin: 0 auto 40px auto;
+            max-width: 650px;
           }
           .btn-primary-hero {
             display: inline-flex;
@@ -565,9 +623,9 @@ export default function App() {
             background-color: #FFFFFF;
             color: #030712;
             border: none;
-            padding: 12px 24px;
+            padding: 14px 28px;
             border-radius: 8px;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
@@ -576,16 +634,44 @@ export default function App() {
           .btn-primary-hero:hover {
             opacity: 0.9;
           }
+          .scroll-explorer {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: #6B7280;
+            text-decoration: none;
+            font-size: 0.76rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 60px;
+            transition: color 0.2s;
+          }
+          .scroll-explorer:hover {
+            color: #FFFFFF;
+          }
+          .scroll-arrow {
+            animation: bounce 1.5s infinite;
+          }
+          @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(4px); }
+          }
 
-          /* SANDBOX PLAYGROUND PREVIEW (White Workspace) */
+          /* SANDBOX PLAYGROUND PREVIEW - SCREEN SIZED */
           .sandbox-section {
-            padding: 20px 24px 60px 24px;
+            min-height: 100vh;
+            padding: 100px 24px;
             max-width: 1000px;
             margin: 0 auto;
             width: 100%;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
           }
           .sandbox-wrapper {
             background-color: #FFFFFF;
@@ -627,7 +713,7 @@ export default function App() {
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
           }
           .sandbox-workspace {
-            min-height: 360px;
+            min-height: 380px;
             background-color: #FFFFFF;
           }
 
@@ -635,7 +721,7 @@ export default function App() {
           .sandbox-chat-view {
             display: grid;
             grid-template-columns: 260px 1fr;
-            min-height: 360px;
+            min-height: 380px;
           }
           .sandbox-sidebar {
             background-color: #F9FAFB;
@@ -891,15 +977,36 @@ export default function App() {
             color: #FFFFFF;
           }
 
-          /* FEATURES SECTION */
+          /* FEATURES SECTION - SCREEN SIZED */
           .features-section {
-            padding: 80px 24px 40px 24px;
+            min-height: 100vh;
+            padding: 100px 24px;
             max-width: 1000px;
             margin: 0 auto;
             width: 100%;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+          }
+          .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+          }
+          .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin: 0 0 12px 0;
+            color: #FFFFFF;
+          }
+          .section-header p {
+            font-size: 1rem;
+            color: #9CA3AF;
+            margin: 0 auto;
+            max-width: 500px;
           }
           .features-grid {
             display: grid;
@@ -941,31 +1048,19 @@ export default function App() {
             margin: 0;
           }
 
-          /* TECH SECTION */
+          /* TECH SECTION - SCREEN SIZED */
           .tech-section {
-            padding: 80px 24px 40px 24px;
+            min-height: 100vh;
+            padding: 100px 24px;
             max-width: 1000px;
             margin: 0 auto;
             width: 100%;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
-          }
-          .section-header {
-            text-align: center;
-            margin-bottom: 50px;
-          }
-          .section-header h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            margin: 0 0 12px 0;
-            color: #FFFFFF;
-          }
-          .section-header p {
-            font-size: 1rem;
-            color: #9CA3AF;
-            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
           }
           .tech-grid {
             display: grid;
@@ -1007,15 +1102,19 @@ export default function App() {
             margin: 0;
           }
 
-          /* USAGE LIMITS SECTION */
+          /* USAGE LIMITS SECTION - SCREEN SIZED */
           .usage-section {
-            padding: 40px 24px 80px 24px;
+            min-height: 100vh;
+            padding: 100px 24px;
             max-width: 1000px;
             margin: 0 auto;
             width: 100%;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
           }
           .usage-card {
             background-color: #0B0F19;
@@ -1071,37 +1170,90 @@ export default function App() {
             overflow: hidden;
           }
 
-          /* FOOTER */
+          /* FOOTER WITH SOCIAL LINKS */
           .landing-footer {
-            margin-top: auto;
             border-top: 1px solid #111827;
-            padding: 30px 24px;
-            text-align: center;
+            background-color: #000000;
+            padding: 40px 40px;
             position: relative;
             z-index: 10;
           }
-          .landing-footer p {
-            font-size: 0.74rem;
-            color: #4B5563;
-            margin: 0;
+          .footer-content {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+          }
+          .footer-credit {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: #9CA3AF;
+          }
+          .heart-icon {
+            color: #EF4444;
+            fill: #EF4444;
+            animation: pulse-heart 1.2s infinite alternate;
+          }
+          @keyframes pulse-heart {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+          }
+          .footer-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+          }
+          .footer-links a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #9CA3AF;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: color 0.2s;
+          }
+          .footer-links a:hover {
+            color: #FFFFFF;
           }
 
+          /* RESPONSIVENESS AND MOBILE FIXES */
           @media (max-width: 900px) {
-            .hero-title {
-              font-size: 2.2rem;
+            .landing-header {
+              padding: 10px 0;
             }
-            .hero-br {
-              display: none;
+            .header-inner {
+              padding: 12px 24px;
             }
             .nav-links {
-              display: none;
+              display: none; /* Hide desktop links */
             }
-            .tech-grid {
-              grid-template-columns: 1fr 1fr;
+            .menu-toggle {
+              display: block; /* Show hamburger button */
             }
-            .usage-rules-list {
-              grid-template-columns: 1fr;
-              gap: 20px;
+            .mobile-nav {
+              display: flex;
+            }
+            .hero-section {
+              padding-top: 120px;
+            }
+            .hero-title {
+              font-size: 2.2rem;
+              line-height: 1.2;
+            }
+            .hero-subtitle {
+              font-size: 0.95rem;
+            }
+            .sandbox-section, .features-section, .tech-section, .usage-section {
+              padding: 60px 24px;
+              min-height: auto; /* Allow auto height on small devices */
             }
             .sandbox-chat-view {
               grid-template-columns: 1fr;
@@ -1109,8 +1261,25 @@ export default function App() {
             .sandbox-sidebar {
               display: none;
             }
-            .sandbox-tabs {
-              flex-wrap: wrap;
+            .sandbox-options-sim {
+              grid-template-columns: 1fr;
+            }
+            .flash-card-sim {
+              width: 100%;
+              min-height: auto;
+            }
+            .features-grid {
+              grid-template-columns: 1fr;
+            }
+            .tech-grid {
+              grid-template-columns: 1fr;
+            }
+            .usage-rules-list {
+              grid-template-columns: 1fr;
+            }
+            .footer-content {
+              flex-direction: column;
+              text-align: center;
             }
           }
         `}</style>
