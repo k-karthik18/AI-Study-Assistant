@@ -94,7 +94,7 @@ export default function App() {
         {/* Fixed Header Navigation - Solid Solid Black */}
         <header className="landing-header">
           <div className="header-inner">
-            <div className="brand-logo">
+            <div className="landing-brand-logo">
               <GraduationCap size={20} className="logo-icon-svg" />
               <span className="logo-text">StudyFlow AI</span>
             </div>
@@ -527,7 +527,7 @@ export default function App() {
             margin: 0 auto;
             box-sizing: border-box;
           }
-          .brand-logo {
+          .landing-brand-logo {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -1447,7 +1447,7 @@ export default function App() {
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
-        <div className="brand-logo">
+        <div className="dashboard-brand-logo">
           <div className="logo-box">
             <GraduationCap size={16} />
           </div>
@@ -1500,7 +1500,7 @@ export default function App() {
           border-bottom: 1px solid #1F2937;
           background-color: #0B0F19;
         }
-        .brand-logo {
+        .dashboard-brand-logo {
           display: flex;
           align-items: center;
           gap: 10px;
