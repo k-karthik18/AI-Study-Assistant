@@ -90,37 +90,46 @@ export default function App() {
         <div className="radial-spotlight spotlight-1"></div>
         <div className="radial-spotlight spotlight-2"></div>
 
-        {/* Header Navigation */}
+        {/* Fixed Header Navigation */}
         <header className="landing-header">
-          <div className="brand-logo">
-            <div className="logo-box">
-              <GraduationCap size={16} />
+          <div className="header-inner">
+            <div className="brand-logo">
+              <div className="logo-box">
+                <GraduationCap size={16} />
+              </div>
+              <span>StudyFlow AI</span>
             </div>
-            <span>StudyFlow AI</span>
-          </div>
 
-          <div className="nav-actions">
-            <span className="api-badge">
-              <span className={`status-dot ${backendStatus === 'online' ? 'online' : 'offline'}`}></span>
-              <span>API: {backendStatus.toUpperCase()}</span>
-            </span>
-            <button 
-              className="btn-signin"
-              onClick={() => {
-                if (isClerkEnabled) {
-                  window.location.hash = "#/sign-in";
-                } else {
-                  alert("Running in Mock Guest Mode. Set VITE_CLERK_PUBLISHABLE_KEY to enable Clerk.");
-                }
-              }}
-            >
-              Sign In
-            </button>
+            <nav className="nav-links">
+              <a href="#features">Features</a>
+              <a href="#sandbox">Sandbox Workspace</a>
+              <a href="#tech">Technology</a>
+              <a href="#rules">Limits & Rules</a>
+            </nav>
+
+            <div className="nav-actions">
+              <span className="api-badge">
+                <span className={`status-dot ${backendStatus === 'online' ? 'online' : 'offline'}`}></span>
+                <span>API: {backendStatus.toUpperCase()}</span>
+              </span>
+              <button 
+                className="btn-signin"
+                onClick={() => {
+                  if (isClerkEnabled) {
+                    window.location.hash = "#/sign-in";
+                  } else {
+                    alert("Running in Mock Guest Mode. Set VITE_CLERK_PUBLISHABLE_KEY to enable Clerk.");
+                  }
+                }}
+              >
+                Sign In
+              </button>
+            </div>
           </div>
         </header>
 
         {/* Hero Section */}
-        <section className="hero-section">
+        <section className="hero-section" id="hero">
           <div className="announcement">
             <span className="badge-glow"></span>
             <Sparkles size={12} className="sparkle" />
@@ -154,7 +163,7 @@ export default function App() {
         </section>
 
         {/* HIGH CONTRAST SANDBOX PLAYGROUND PREVIEW (White Workspace) */}
-        <section className="sandbox-section">
+        <section className="sandbox-section" id="sandbox">
           <div className="sandbox-wrapper">
             <div className="sandbox-tabs">
               <button 
@@ -268,8 +277,42 @@ export default function App() {
           </div>
         </section>
 
+        {/* FEATURE GRID */}
+        <section className="features-section" id="features">
+          <div className="section-header">
+            <h2>Active study tools built for recall</h2>
+            <p>We build structured learning assets directly from your sources, avoiding standard LLM hallucinations.</p>
+          </div>
+
+          <div className="features-grid">
+            <div className="feature-card">
+              <div className="feature-icon">
+                <Sparkles size={20} />
+              </div>
+              <h3>Interactive AI Tutoring</h3>
+              <p>Grounded RAG chat that answers questions using only the provided textbook, citing exact sources and page references.</p>
+            </div>
+
+            <div className="feature-card">
+              <div className="feature-icon">
+                <BookOpen size={20} />
+              </div>
+              <h3>Active Practice Quizzes</h3>
+              <p>Automatically generated multiple-choice tests with detailed explanations and grading to verify your understanding.</p>
+            </div>
+
+            <div className="feature-card">
+              <div className="feature-icon">
+                <Clock size={20} />
+              </div>
+              <h3>Spaced Repetition Flashcards</h3>
+              <p>Flip cards with memory retrieval scores ("Easy", "Medium", "Hard") that adapt study sessions to your pace.</p>
+            </div>
+          </div>
+        </section>
+
         {/* TECH OF THE WEB */}
-        <section className="tech-section">
+        <section className="tech-section" id="tech">
           <div className="section-header">
             <h2>The Tech Stack Behind StudyFlow AI</h2>
             <p>Engineered for high performance, accuracy, and absolute local data integrity.</p>
@@ -300,7 +343,7 @@ export default function App() {
         </section>
 
         {/* USAGE RULES */}
-        <section className="usage-section">
+        <section className="usage-section" id="rules">
           <div className="usage-card">
             <h3>Workspace Rules & Limits</h3>
             <div className="usage-rules-list">
@@ -343,7 +386,8 @@ export default function App() {
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow-x: hidden;
+            overflow-y: auto;
+            width: 100vw;
           }
 
           /* GLOWS */
@@ -368,18 +412,26 @@ export default function App() {
             right: -100px;
           }
 
-          /* HEADER */
+          /* HEADER - FIXED NAVIGATION BAR */
           .landing-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background-color: rgba(3, 7, 18, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+          }
+          .header-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 24px 40px;
+            padding: 16px 40px;
             max-width: 1200px;
             width: 100%;
             margin: 0 auto;
             box-sizing: border-box;
-            position: relative;
-            z-index: 10;
           }
           .brand-logo {
             display: flex;
@@ -398,6 +450,21 @@ export default function App() {
             display: flex;
             align-items: center;
             justify-content: center;
+            color: #FFFFFF;
+          }
+          .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+          }
+          .nav-links a {
+            color: #9CA3AF;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.2s;
+          }
+          .nav-links a:hover {
             color: #FFFFFF;
           }
           .nav-actions {
@@ -448,7 +515,7 @@ export default function App() {
 
           /* HERO */
           .hero-section {
-            padding: 70px 24px 30px 24px;
+            padding: 150px 24px 40px 24px;
             text-align: center;
             max-width: 850px;
             margin: 0 auto;
@@ -824,6 +891,56 @@ export default function App() {
             color: #FFFFFF;
           }
 
+          /* FEATURES SECTION */
+          .features-section {
+            padding: 80px 24px 40px 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 10;
+          }
+          .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+          }
+          .feature-card {
+            background-color: #0B0F19;
+            border: 1px solid #1F2937;
+            border-radius: 12px;
+            padding: 30px;
+            transition: border-color 0.2s;
+          }
+          .feature-card:hover {
+            border-color: #374151;
+          }
+          .feature-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #111827;
+            border: 1px solid #1F2937;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            margin-bottom: 20px;
+          }
+          .feature-card h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin: 0 0 10px 0;
+            color: #FFFFFF;
+          }
+          .feature-card p {
+            font-size: 0.84rem;
+            color: #9CA3AF;
+            line-height: 1.5;
+            margin: 0;
+          }
+
           /* TECH SECTION */
           .tech-section {
             padding: 80px 24px 40px 24px;
@@ -974,6 +1091,9 @@ export default function App() {
               font-size: 2.2rem;
             }
             .hero-br {
+              display: none;
+            }
+            .nav-links {
               display: none;
             }
             .tech-grid {
