@@ -223,60 +223,96 @@ export default function App() {
 
         {/* Hero Section - Screen Sized & Spacious */}
         <section className="hero-section" id="hero">
-          <div className="hero-container-inner">
-            <div className="announcement">
-              <Sparkles size={12} className="sparkle" />
-              <span>Grounded active recall learning engine</span>
-            </div>
-
-            <h1 className="hero-title">
-              Turn your textbooks <br />
-              into <span className="text-gradient">interactive study spaces</span>
-            </h1>
-
-            <p className="hero-subtitle">
-              Upload PDFs or lecture transcripts to instantly generate active-recall flashcards, practice quizzes, and an AI tutor grounded strictly in your coursework.
-            </p>
-
-            <div className="cta-wrapper">
-              <button 
-                className="btn-primary-hero"
-                onClick={() => {
-                  if (isClerkEnabled) {
-                    window.location.hash = "#/sign-in";
-                  } else {
-                    alert("Running in Mock Mode. Set your Clerk publishable key to sign in.");
-                  }
-                }}
-              >
-                <span>Get Started for Free</span>
-                <ArrowRight size={16} />
-              </button>
-            </div>
-
-            {/* Core Stats / Tech Badges to fill Hero Space */}
-            <div className="hero-stats-badges">
-              <div className="stat-badge-card">
-                <span className="stat-val">384-Dim</span>
-                <span className="stat-lbl">Local Vector Embeddings</span>
+          <div className="hero-grid">
+            <div className="hero-text-side">
+              <div className="announcement">
+                <Sparkles size={12} className="sparkle" />
+                <span>Grounded active recall learning engine</span>
               </div>
-              <div className="stat-badge-card">
-                <span className="stat-val">Under 15ms</span>
-                <span className="stat-lbl">Retrieval Search Latency</span>
-              </div>
-              <div className="stat-badge-card">
-                <span className="stat-val">RAGAS</span>
-                <span className="stat-lbl">Double Grounding Audits</span>
+
+              <h1 className="hero-title">
+                Turn your textbooks <br />
+                into <span className="text-gradient">interactive study spaces</span>
+              </h1>
+
+              <p className="hero-subtitle">
+                Upload PDFs or lecture transcripts to instantly generate active-recall flashcards, practice quizzes, and an AI tutor grounded strictly in your coursework.
+              </p>
+
+              <div className="cta-wrapper">
+                <button 
+                  className="btn-primary-hero"
+                  onClick={() => {
+                    if (isClerkEnabled) {
+                      window.location.hash = "#/sign-in";
+                    } else {
+                      alert("Running in Mock Mode. Set your Clerk publishable key to sign in.");
+                    }
+                  }}
+                >
+                  <span>Get Started for Free</span>
+                  <ArrowRight size={16} />
+                </button>
               </div>
             </div>
 
-            {showScrollArrow && (
-              <a href="#sandbox" className="scroll-explorer animate-fade-in">
-                <span>Scroll to explore</span>
-                <ChevronDown size={18} className="scroll-arrow" />
-              </a>
-            )}
+            <div className="hero-visual-side">
+              <div className="visual-container">
+                {/* Book Source */}
+                <div className="visual-book">
+                  <div className="book-spine"></div>
+                  <div className="book-cover">
+                    <div className="book-pdf-icon">PDF</div>
+                    <BookOpen size={36} className="book-center-icon" />
+                    <span className="book-title">Course Textbook</span>
+                    <div className="book-decoration-lines">
+                      <span className="dec-line"></span>
+                      <span className="dec-line short"></span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Flying / transforming flashcards stream */}
+                <div className="visual-card visual-card-1">
+                  <div className="visual-card-glow"></div>
+                  <span className="card-lbl-sim question">Q</span>
+                  <p className="card-txt-sim">What notifies CPU of device events?</p>
+                  <span className="card-btn-sim">Reveal</span>
+                </div>
+
+                <div className="visual-card visual-card-2">
+                  <div className="visual-card-glow"></div>
+                  <span className="card-lbl-sim answer">A</span>
+                  <p className="card-txt-sim">An Interrupt signal or software trap.</p>
+                  <div className="card-check-sim"><CheckCircle2 size={12} /></div>
+                </div>
+
+                <div className="visual-card visual-card-3">
+                  <div className="visual-card-glow"></div>
+                  <span className="card-lbl-sim question">Q</span>
+                  <p className="card-txt-sim">Define Virtual Memory...</p>
+                </div>
+
+                {/* Connection lines and flying flow dots */}
+                <div className="flow-lines-wrapper">
+                  <svg className="flow-path-svg" viewBox="0 0 200 100" fill="none">
+                    <path d="M10,50 Q100,-10 190,40" stroke="rgba(99,102,241,0.2)" strokeWidth="2" strokeDasharray="4 4" />
+                    <path d="M10,60 Q100,110 190,60" stroke="rgba(217,70,239,0.2)" strokeWidth="2" strokeDasharray="4 4" />
+                  </svg>
+                  <div className="flow-particle dot-1"></div>
+                  <div className="flow-particle dot-2"></div>
+                  <div className="flow-particle dot-3"></div>
+                </div>
+              </div>
+            </div>
           </div>
+
+          {showScrollArrow && (
+            <a href="#sandbox" className="scroll-explorer animate-fade-in">
+              <span>Scroll to explore</span>
+              <ChevronDown size={18} className="scroll-arrow" />
+            </a>
+          )}
         </section>
 
         {/* HIGH CONTRAST SANDBOX PLAYGROUND PREVIEW (White Workspace inside macOS Window) */}
@@ -724,18 +760,25 @@ export default function App() {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 140px 24px 80px 24px;
+            padding: 120px 24px 80px 24px;
             box-sizing: border-box;
             position: relative;
             z-index: 10;
           }
-          .hero-container-inner {
-            text-align: center;
-            max-width: 850px;
-            width: 100%;
+          .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 48px;
+            align-items: center;
+            max-width: 1200px;
+            width: 92%;
+            margin: 0 auto;
+            text-align: left;
+          }
+          .hero-text-side {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
           }
           .announcement {
             display: inline-flex;
@@ -760,6 +803,7 @@ export default function App() {
             letter-spacing: -0.04em;
             margin: 0 0 24px 0;
             color: #FFFFFF;
+            text-align: left;
           }
           .text-gradient {
             background: linear-gradient(135deg, #FFFFFF 30%, #C7D2FE 100%);
@@ -770,8 +814,9 @@ export default function App() {
             font-size: 1.15rem;
             color: #9CA3AF;
             line-height: 1.6;
-            margin: 0 auto 40px auto;
-            max-width: 650px;
+            margin: 0 0 40px 0;
+            max-width: 580px;
+            text-align: left;
           }
           .btn-primary-hero {
             display: inline-flex;
@@ -792,39 +837,271 @@ export default function App() {
             opacity: 0.9;
             transform: translateY(-1px);
           }
-          
-          /* Hero stats ribbons to pack empty space */
-          .hero-stats-badges {
+
+          /* HERO VISUAL SIDE */
+          .hero-visual-side {
+            position: relative;
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 24px;
-            margin-top: 48px;
-            flex-wrap: wrap;
+            height: 450px;
             width: 100%;
           }
-          .stat-badge-card {
-            background-color: #0B0F19;
-            border: 1px solid #1F2937;
-            padding: 16px 24px;
+          .visual-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            perspective: 1000px;
+          }
+
+          /* BOOK CSS */
+          .visual-book {
+            width: 180px;
+            height: 250px;
+            background: linear-gradient(135deg, #0F172A 0%, #020617 100%);
+            border: 1px solid #1E293B;
             border-radius: 12px;
+            position: absolute;
+            left: 20px;
+            top: calc(50% - 125px);
+            transform: rotateY(25deg) rotateX(10deg);
+            box-shadow: -15px 25px 45px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.1);
+            display: flex;
+            box-sizing: border-box;
+            z-index: 10;
+          }
+          .book-spine {
+            width: 16px;
+            background: linear-gradient(to right, #1E1B4B 0%, #312E81 50%, #1E1B4B 100%);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            border-right: 1px solid rgba(255,255,255,0.05);
+          }
+          .book-cover {
+            flex: 1;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 180px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            justify-content: space-between;
+            position: relative;
           }
-          .stat-badge-card .stat-val {
-            font-size: 1.25rem;
-            font-weight: 700;
+          .book-pdf-icon {
+            background-color: #EF4444;
             color: #FFFFFF;
-            margin-bottom: 4px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
           }
-          .stat-badge-card .stat-lbl {
-            font-size: 0.72rem;
-            color: #6B7280;
-            font-weight: 500;
+          .book-center-icon {
+            color: #6366F1;
+            margin-top: 24px;
+            filter: drop-shadow(0 0 10px rgba(99,102,241,0.5));
+          }
+          .book-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #E2E8F0;
+            text-align: center;
+            margin-top: 12px;
+          }
+          .book-decoration-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+            align-items: center;
+            margin-top: auto;
+          }
+          .dec-line {
+            height: 3px;
+            width: 80%;
+            background-color: #334155;
+            border-radius: 2px;
+          }
+          .dec-line.short {
+            width: 50%;
+          }
+
+          /* FLASHCARDS CSS */
+          .visual-card {
+            background-color: #FFFFFF;
+            color: #1F2937;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            position: absolute;
+            box-sizing: border-box;
+            z-index: 12;
+            transition: all 0.3s ease;
+          }
+          .visual-card-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 12px;
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+            pointer-events: none;
+          }
+          .card-lbl-sim {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+          }
+          .card-lbl-sim.question {
+            background-color: #EEF2F6;
+            color: #4B5563;
+          }
+          .card-lbl-sim.answer {
+            background-color: #ECFDF5;
+            color: #065F46;
+          }
+          .card-txt-sim {
+            font-size: 0.8rem;
+            line-height: 1.4;
+            font-weight: 500;
+            margin: 0;
+            color: #111827;
+          }
+          .card-btn-sim {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: #6366F1;
+            margin-top: 10px;
+            border-top: 1px solid #F3F4F6;
+            padding-top: 6px;
+            width: 100%;
+          }
+          .card-check-sim {
+            color: #10B981;
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+          }
+
+          /* Placement of visual elements */
+          .visual-card-1 {
+            width: 175px;
+            right: 40px;
+            top: 50px;
+            transform: rotate(8deg);
+            animation: float-v1 4.5s infinite ease-in-out;
+          }
+          .visual-card-2 {
+            width: 185px;
+            right: 20px;
+            bottom: 70px;
+            transform: rotate(-6deg);
+            animation: float-v2 4.2s infinite ease-in-out;
+          }
+          .visual-card-3 {
+            width: 155px;
+            right: 180px;
+            top: 190px;
+            transform: rotate(-12deg);
+            opacity: 0.85;
+            animation: float-v3 4.8s infinite ease-in-out;
+          }
+
+          /* FLOW DUST/PARTICLES */
+          .flow-lines-wrapper {
+            position: absolute;
+            left: 170px;
+            right: 170px;
+            top: 100px;
+            bottom: 100px;
+            z-index: 5;
+            pointer-events: none;
+          }
+          .flow-path-svg {
+            width: 100%;
+            height: 100%;
+            opacity: 0.7;
+          }
+          .flow-particle {
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(135deg, #6366F1 0%, #D946EF 100%);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 10px #6366F1;
+          }
+          .flow-particle.dot-1 {
+            animation: flow-particle-ani 2.8s infinite linear;
+          }
+          .flow-particle.dot-2 {
+            animation: flow-particle-ani2 3.2s infinite linear;
+            animation-delay: 0.9s;
+          }
+          .flow-particle.dot-3 {
+            animation: flow-particle-ani 3s infinite linear;
+            animation-delay: 1.8s;
+          }
+
+          /* Animations */
+          @keyframes float-v1 {
+            0%, 100% { transform: translateY(0) rotate(8deg); }
+            50% { transform: translateY(-10px) rotate(9deg); }
+          }
+          @keyframes float-v2 {
+            0%, 100% { transform: translateY(0) rotate(-6deg); }
+            50% { transform: translateY(12px) rotate(-4deg); }
+          }
+          @keyframes float-v3 {
+            0%, 100% { transform: translateY(0) rotate(-12deg); }
+            50% { transform: translateY(-8px) rotate(-14deg); }
+          }
+
+          @keyframes flow-particle-ani {
+            0% {
+              left: 0%;
+              top: 50%;
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+            }
+            90% {
+              opacity: 1;
+            }
+            100% {
+              left: 90%;
+              top: 30%;
+              opacity: 0;
+            }
+          }
+
+          @keyframes flow-particle-ani2 {
+            0% {
+              left: 0%;
+              top: 60%;
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+            }
+            90% {
+              opacity: 1;
+            }
+            100% {
+              left: 90%;
+              top: 70%;
+              opacity: 0;
+            }
           }
 
           .scroll-explorer {
@@ -1605,28 +1882,55 @@ export default function App() {
               display: flex;
             }
             .hero-section {
-              padding-top: 120px;
+              padding-top: 100px;
+              min-height: auto;
+            }
+            .hero-grid {
+              grid-template-columns: 1fr;
+              text-align: center;
+              gap: 40px;
+            }
+            .hero-text-side {
+              align-items: center;
+              text-align: center;
             }
             .hero-title {
-              font-size: 2.2rem;
+              font-size: 2.4rem;
               line-height: 1.2;
+              text-align: center;
             }
             .hero-subtitle {
               font-size: 0.95rem;
+              text-align: center;
+              margin: 0 0 24px 0;
             }
-            .hero-stats-badges {
-              margin-top: 24px;
-              gap: 12px;
+            .hero-visual-side {
+              height: 380px;
             }
-            .stat-badge-card {
-              min-width: 130px;
-              padding: 12px;
+            .visual-book {
+              left: 5%;
+              width: 140px;
+              height: 200px;
+              top: calc(50% - 100px);
             }
-            .stat-badge-card .stat-val {
-              font-size: 1.05rem;
+            .visual-card-1 {
+              right: 5%;
+              width: 145px;
+              top: 40px;
             }
-            .stat-badge-card .stat-lbl {
-              font-size: 0.65rem;
+            .visual-card-2 {
+              right: 2%;
+              width: 145px;
+              bottom: 40px;
+            }
+            .visual-card-3 {
+              right: 40%;
+              width: 120px;
+              top: 150px;
+            }
+            .flow-lines-wrapper {
+              left: 120px;
+              right: 120px;
             }
             .sandbox-section, .features-section, .tech-section, .usage-section {
               padding: 60px 24px;
