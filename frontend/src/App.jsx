@@ -138,7 +138,7 @@ export default function App() {
         <style>{`
           .auth-loader-screen {
             height: 100vh;
-            width: 100vw;
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -671,7 +671,8 @@ export default function App() {
             flex-direction: column;
             position: relative;
             overflow-y: auto;
-            width: 100vw;
+            width: 100%;
+            overflow-x: hidden;
             scroll-behavior: smooth;
           }
 
